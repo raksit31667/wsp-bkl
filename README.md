@@ -16,14 +16,35 @@ pip install -r requirements.txt
 
 ## Create the new feature / branch
 ``` sh
-git checkout -b <feature_name>/<task_name>
+git checkout <base_branch>
+git checkout -b <task_name>
 ```
 Then add, commit and push from that branch.
+
+Next, do the merge in GitHub.
 
 Example, in Use case "View the movie list" and you would like to edit the templates:
 ``` sh
 git checkout -b show_list/templates
 ```
 
-## Feature name
-- TBD
+## Feature
+push to these following branches
+
+- view-list-movies (momo)
+- view-movie-description (momo)
+- watch-movie (tan)
+- login (boss)
+- register (boss)
+- download-movie (peak)
+- search (tan)
+- filter (earth)
+- admin-login
+- admin-add
+- admin-delete
+- admin-edit
+
+## Specific Feature
+push to the branch ```master```
+- default css
+- default templates
