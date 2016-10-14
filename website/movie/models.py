@@ -22,4 +22,5 @@ class Movie(models.Model):
     user = models.ForeignKey(User, default=1)
 
     def __str__(self):
-        return self.movie_name
+        if self.movie_name:
+            return self.movie_name + " (%d)" % self.release_year
