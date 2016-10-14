@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.urls import reverse
+from .models import Genre, Movie
 import ctypes
 from django.http import HttpResponse, HttpResponseRedirect
+from django.core.exceptions import ObjectDoesNotExist
 
 def index(request):
     return render(request, 'index.html')
@@ -12,6 +14,23 @@ def login(request):
 
 def register(request):
     return render(request, 'register.html')
+
+def filter(request):
+    all_genres = Genre.objects.all()
+    selected_genre = None
+    try:
+        all_movies = Movie.objects.filter(genre_id=request.session['selected_genre_id'])
+        selected_genre = Genre.objects.get(pk=request.session['selected_genre_id'])
+        del request.session['selected_genre_id']
+    except ObjectDoesNotExist:
+        all_movies = Movie.objects.all()
+
+    return render(request, 'filter.html', {'all_genres': all_genres, 'all_movies': all_movies, 'selected_genre': selected_genre})
+
+def do_filter(request):
+    genre_id = request.POST.get('dropdown')
+    request.session['selected_genre_id'] = genre_id
+    return HttpResponseRedirect(reverse('movie:filter'))
 
 def doesExist(username):
     for user in User.objects.all():
