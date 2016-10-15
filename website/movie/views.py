@@ -22,7 +22,7 @@ def filter(request):
         all_movies = Movie.objects.filter(genre_id=request.session['selected_genre_id'])
         selected_genre = Genre.objects.get(pk=request.session['selected_genre_id'])
         del request.session['selected_genre_id']
-    except ObjectDoesNotExist:
+    except (KeyError, ObjectDoesNotExist):
         all_movies = Movie.objects.all()
 
     return render(request, 'filter.html', {'all_genres': all_genres, 'all_movies': all_movies, 'selected_genre': selected_genre})
