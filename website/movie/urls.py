@@ -10,5 +10,4 @@ urlpatterns = [
     url(r'^api/login/$', views.login_api, name="login_api"),
     url(r'^api/register/$', views.register_api, name="register_api"),
     url(r'^filter/$', views.filter, name="filter"),
-    url(r'^do_filter/$', views.do_filter, name="do_filter"),
 ]
