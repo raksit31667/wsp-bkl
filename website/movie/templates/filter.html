@@ -5,9 +5,9 @@
     <title>Filter</title>
   </head>
   <body>
-    <form action="{% url 'movie:do_filter' %}" method="post">
+    <form action="{% url 'movie:filter' %}" method="post">
       {% csrf_token %}
-      <select name="dropdown" onchange="form.submit();">
+      <select name="dropdown_genre" onchange="form.submit();">
         <option value=0>All movies</option>
         {% for genre in all_genres %}
           {% if selected_genre and genre == selected_genre %}
@@ -16,6 +16,18 @@
             <option value={{genre.id}}>{{genre.genre_name}}</option>
           {% endif %}
         {% endfor %}
+      </select>
+
+      <select name="dropdown_sortby" onchange="form.submit();">
+        {% if selected_sortby is None or selected_sortby == "movie_name" %}
+          <option value="movie_name" selected="selected">A-Z</option>
+          <option value="release_year">Release Year</option>
+
+        {% elif selected_sortby == "release_year" %}
+          <option value="movie_name">A-Z</option>
+          <option value="release_year" selected="selected">Release Year</option>
+
+        {% endif %}
       </select>
 
       <ul>
