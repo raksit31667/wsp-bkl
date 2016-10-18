@@ -4,7 +4,6 @@ from django.urls import reverse
 from .models import Genre, Movie
 import ctypes
 from django.http import HttpResponse, HttpResponseRedirect
-from django.core.exceptions import ObjectDoesNotExist
 
 def index(request):
     return render(request, 'index.html')
@@ -17,20 +16,40 @@ def register(request):
 
 def filter(request):
     all_genres = Genre.objects.all()
+    all_movies = None
     selected_genre = None
-    try:
-        all_movies = Movie.objects.filter(genre_id=request.session['selected_genre_id'])
-        selected_genre = Genre.objects.get(pk=request.session['selected_genre_id'])
-        del request.session['selected_genre_id']
-    except ObjectDoesNotExist:
+    selected_sortby = None
+
+    # select the dropdown_sortby
+    if request.POST.get('dropdown_sortby'):
+        request.session['selected_sortby'] = request.POST.get('dropdown_sortby')
+        selected_sortby = request.session.get('selected_sortby')
+        if not request.session.get('selected_genre_id'):
+            all_movies = Movie.objects.order_by(request.session.get('selected_sortby'))
+
+        else:
+            all_movies = Movie.objects.filter(genre_id=request.session.get('selected_genre_id')).order_by(request.session.get('selected_sortby'))
+
+    # select the dropdown_genre
+    if request.POST.get('dropdown_genre'):
+        request.session['selected_genre_id'] = request.POST.get('dropdown_genre')
+        selected_sortby = request.session.get('selected_sortby')
+        if not request.session.get('selected_sortby'):
+            request.session['selected_sortby'] = "movie_name"
+
+        # select the dropdown_genre except "All Movies"
+        if request.POST.get('dropdown_genre') != '0':
+            selected_genre = Genre.objects.get(pk=request.session.get('selected_genre_id'))
+            all_movies = Movie.objects.filter(genre_id=request.session.get('selected_genre_id')).order_by(request.session.get('selected_sortby'))
+
+        else:
+            all_movies = Movie.objects.order_by(request.session.get('selected_sortby'))
+
+    # first time
+    if not request.POST.get('dropdown_genre') and not request.POST.get('dropdown_sortby'):
         all_movies = Movie.objects.all()
 
-    return render(request, 'filter.html', {'all_genres': all_genres, 'all_movies': all_movies, 'selected_genre': selected_genre})
-
-def do_filter(request):
-    genre_id = request.POST.get('dropdown')
-    request.session['selected_genre_id'] = genre_id
-    return HttpResponseRedirect(reverse('movie:filter'))
+    return render(request, 'filter.html', {'all_genres': all_genres, 'all_movies': all_movies, 'selected_genre': selected_genre, 'selected_sortby': selected_sortby})
 
 def doesExist(username):
     for user in User.objects.all():
