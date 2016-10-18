@@ -1,13 +1,21 @@
+<!DOCTYPE html>
 <html>
-    <head></head>
-    <body>
-        <div>
-            <h2><a href="{% url 'movie:register' %}">Register</a></h2>
-        </div>
+  <head>
+    <meta charset="utf-8">
+    <title>BKL Movie Streaming Service</title>
 
-        <div>
-            <h2><a href="{% url 'movie:login' %}">Login</a></h2>
-        </div>
-    
-    </body>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+    <script type="text/javascript" src="{% static 'jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#register-modal">Register</button>
+      {% include 'register.html' %}
+    </div>
+  </body>
+
 </html>

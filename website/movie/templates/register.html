@@ -1,7 +1,75 @@
-<form action="{% url 'movie:register_api'%}" method="post">
-  {% csrf_token %}
-  <input name="username" placeholder="Username"/>
-  <input name="password" type="password" placeholder="Password"/>
-  <input name="confirm-password" type="password" placeholder="Confirm password"/>
-  <input type="submit" value="Sign up"/>
-</form>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Registration Form</title>
+
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+    <script type="text/javascript" href="{% static 'jquery.js' %}"></script>
+    <script type="text/javascript" href="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+
+  </head>
+  <body>
+    <div class="modal fade" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="register-modal-label" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" id="register-modal-label">Registration Form</h4>
+          </div>
+          <div class="modal-body">
+            <form action="{% url 'movie:register_api'%}" method="post">
+              {% csrf_token %}
+              <div class="form-group row">
+                <label for="input-username" class="col-xs-2 form-control-label">Username:</label>
+                <div class="col-xs-10">
+                  <input id="input-username" class="form-control" name="username" placeholder="Username"/>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="input-password" class="col-xs-2 form-control-label">Password:</label>
+                <div class="col-xs-10">
+                  <input id="input-password" class="form-control" name="password" placeholder="Password"/>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="input-confirm-password" class="col-xs-2 form-control-label">Confirm Password:</label>
+                <div class="col-xs-10">
+                  <input id="input-confirm-password" class="form-control" name="confirm-password" type="password" placeholder="Confirm password"/>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="input-email" class="col-xs-2 form-control-label">E-mail:</label>
+                <div class="col-xs-10">
+                  <input id="input-email" class="form-control" name="email" type="email" placeholder="E-mail"/>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-md-offset-4 col-md-4">
+                  <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input">
+                    I accept our policy.
+                  </label>
+                </div>
+            </div>
+
+              <div class="form-group row">
+                <div class="col-xs-offset-5 col-xs-2">
+                  <input type="submit" value="Register"/>
+                </div>
+              </div>
+              
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
