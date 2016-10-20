@@ -1,12 +1,18 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
+from django.utils.safestring import mark_safe
 from django.urls import reverse
 from .models import Genre, Movie
+from django.core import serializers
+import json
 import ctypes
 from django.http import HttpResponse, HttpResponseRedirect
 
 def index(request):
-    return render(request, 'index.html')
+    all_movies = Movie.objects.values_list('movie_name', flat=True)
+    all_movies_list = list(all_movies)
+    print (all_movies_list)
+    return render(request, 'index.html', {'all_movies_list': mark_safe(all_movies_list)})
 
 def login(request):
     return render(request, 'login.html')
