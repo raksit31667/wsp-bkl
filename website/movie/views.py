@@ -5,6 +5,7 @@ from django.urls import reverse
 from .models import Genre, Movie
 import ctypes
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib import messages
 
 def index(request):
     all_movies = Movie.objects.values_list('movie_name', flat=True)
@@ -54,14 +55,20 @@ def filter(request):
 
     return render(request, 'filter.html', {'all_genres': all_genres, 'all_movies': all_movies, 'selected_genre': selected_genre, 'selected_sortby': selected_sortby})
 
-def doesExist(username):
+def does_username_exist(username):
     for user in User.objects.all():
         if (user.get_username() == username):
             return True
     return False
 
-def newUser(username, password):
-    user = User.objects.create_user(username, None, password)
+def does_email_exist(email):
+    for user in User.objects.all():
+        if (user.email == email):
+            return True
+    return False
+
+def newUser(username, password, email):
+    user = User.objects.create_user(username, email, password)
     user.save()
 
 def authenticate(username, password):
@@ -88,16 +95,37 @@ def register_api(request):
     username = request.POST['username']
     password = request.POST['password']
     confirm_password = request.POST['confirm-password']
+    email = request.POST['email']
+    check_policy = request.POST.get('check-policy','Default')
 
-    if(password != confirm_password):
+    has_errors = False
+
+    if does_username_exist(username):
+        has_errors = True
+        mbox('Error', 'This username is already registered.', 0)
+        return render(request, 'index.html', {'has_errors': has_errors})
+
+    elif does_email_exist(email):
+        has_errors = True
+        mbox('Error', 'This email is already registered.', 0)
+        return render(request, 'index.html', {'has_errors': has_errors})
+
+    elif password != confirm_password:
+        has_errors = True
         mbox('Error', 'Your password does not match.', 0)
-        return None
+        return render(request, 'index.html', {'has_errors': has_errors})
 
-    if (not doesExist(username)):
-        newUser(username, password)
-        mbox('Success', 'Register Completed.', 0)
-        return HttpResponseRedirect(reverse('movie:index'))
+    elif len(password) < 6:
+        has_errors = True
+        mbox('Error', 'Your password is too short.', 0)
+        return render(request, 'index.html', {'has_errors': has_errors})
+
+    elif check_policy:
+        has_errors = True
+        mbox('Error', 'Please accept our policy.', 0)
+        return render(request, 'index.html', {'has_errors': has_errors})
 
     else:
-        mbox('Error', 'Username does exist', 0)
-        return None
+        newUser(username, password, email)
+        mbox('Success', 'Register Completed.', 0)
+        return render(request, 'index.html')
