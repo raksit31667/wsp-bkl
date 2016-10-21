@@ -1,20 +1,40 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
+from django import forms
+from django.views.generic import View
 from django.utils.safestring import mark_safe
 from django.urls import reverse
 from .models import Genre, Movie
+from .forms import UserForm
 import ctypes
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 
-def index(request):
-    all_movies = Movie.objects.values_list('movie_name', flat=True)
-    all_movies_list = list(all_movies)
-    if(request.session.get('has_errors') == True):
-        request.session['has_errors'] = False
-        return render(request, 'index.html', {'all_movies_list': mark_safe(all_movies_list), 'has_errors': True})
-    else:
-        return render(request, 'index.html', {'all_movies_list': mark_safe(all_movies_list)})
+class IndexView(View):
+    form_class = UserForm
+    template_name = 'index.html'
+
+    def get(self, request):
+        form = self.form_class(None)
+        all_movies = Movie.objects.values_list('movie_name', flat=True)
+        all_movies_list = list(all_movies)
+        return render(request, self.template_name, {'form': form, 'all_movies_list': mark_safe(all_movies_list)})
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user.set_password(password)
+            user.save()
+            all_movies = Movie.objects.values_list('movie_name', flat=True)
+            all_movies_list = list(all_movies)
+            return render(request, self.template_name, {'form': form, 'all_movies_list': mark_safe(all_movies_list)})
+
+        all_movies = Movie.objects.values_list('movie_name', flat=True)
+        all_movies_list = list(all_movies)
+        return render(request, self.template_name, {'form': form, 'all_movies_list': mark_safe(all_movies_list), 'has_errors': True})
 
 def login(request):
     return render(request, 'login.html')
@@ -94,42 +114,3 @@ def login_api(request):
     else:
         mbox('Error', 'Your username or password is incorrect.', 0)
         return HttpResponseRedirect(reverse('movie:login'))
-
-def register_api(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    confirm_password = request.POST['confirm-password']
-    email = request.POST['email']
-    check_policy = request.POST.get('check-policy','Default')
-
-    request.session['has_errors'] = False
-
-    if does_username_exist(username):
-        request.session['has_errors'] = True
-        # mbox('Error', 'This username is already registered.', 0)
-        return HttpResponseRedirect(reverse('movie:index'))
-
-    elif does_email_exist(email):
-        request.session['has_errors'] = True
-        # mbox('Error', 'This email is already registered.', 0)
-        return HttpResponseRedirect(reverse('movie:index'))
-
-    elif password != confirm_password:
-        request.session['has_errors'] = True
-        # mbox('Error', 'Your password does not match.', 0)
-        return HttpResponseRedirect(reverse('movie:index'))
-
-    elif len(password) < 6:
-        request.session['has_errors'] = True
-        # mbox('Error', 'Your password is too short.', 0)
-        return HttpResponseRedirect(reverse('movie:index'))
-
-    elif check_policy:
-        request.session['has_errors'] = True
-        # mbox('Error', 'Please accept our policy.', 0)
-        return HttpResponseRedirect(reverse('movie:index'))
-
-    else:
-        newUser(username, password, email)
-        # mbox('Success', 'Register Completed.', 0)
-        return HttpResponseRedirect(reverse('movie:index'))
