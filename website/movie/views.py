@@ -1,14 +1,13 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
 from django import forms
 from django.views.generic import View
 from django.utils.safestring import mark_safe
 from django.urls import reverse
 from .models import Genre, Movie
 from .forms import UserForm
-import ctypes
 from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib import messages
 
 class IndexView(View):
     form_class = UserForm
@@ -18,7 +17,12 @@ class IndexView(View):
         form = self.form_class(None)
         all_movies = Movie.objects.values_list('movie_name', flat=True)
         all_movies_list = list(all_movies)
-        return render(request, self.template_name, {'form': form, 'all_movies_list': mark_safe(all_movies_list)})
+        invalid_login = request.session.get('invalid_login')
+        try:
+            del request.session['invalid_login']
+        except KeyError:
+            pass
+        return render(request, self.template_name, {'form': form, 'all_movies_list': mark_safe(all_movies_list), 'invalid_login': invalid_login})
 
     def post(self, request):
         form = self.form_class(request.POST)
@@ -34,13 +38,7 @@ class IndexView(View):
 
         all_movies = Movie.objects.values_list('movie_name', flat=True)
         all_movies_list = list(all_movies)
-        return render(request, self.template_name, {'form': form, 'all_movies_list': mark_safe(all_movies_list), 'has_errors': True})
-
-def login(request):
-    return render(request, 'login.html')
-
-def register(request):
-    return render(request, 'register.html')
+        return render(request, self.template_name, {'form': form, 'all_movies_list': mark_safe(all_movies_list), 'invalid_register': True})
 
 def filter(request):
     all_genres = Genre.objects.all()
@@ -95,11 +93,11 @@ def newUser(username, password, email):
     user = User.objects.create_user(username, email, password)
     user.save()
 
-def authenticate(username, password):
-    for user in User.objects.all():
-        if (user.get_username() == username and user.check_password(password)):
-            return user
-    return None
+# def authenticate(username, password):
+#     for user in User.objects.all():
+#         if (user.get_username() == username and user.check_password(password)):
+#             return user
+#     return None
 
 # def mbox(title, text, style):
 #     ctypes.windll.user32.MessageBoxW(0, text, title, style)
@@ -107,10 +105,15 @@ def authenticate(username, password):
 def login_api(request):
     username = request.POST['username']
     password = request.POST['password']
-    auth_user = authenticate(username, password)
+    auth_user = authenticate(username=username, password=password)
+    request.session['invalid_login'] = None
     if(auth_user is not None):
-        mbox('Success', 'Login Completed.', 0)
-        return HttpResponseRedirect(reverse('movie:index'))
+        if auth_user.is_active:
+            login(request, auth_user)
+        else:
+            request.session['invalid_login'] = 'Your account has been disabled.'
+
     else:
-        mbox('Error', 'Your username or password is incorrect.', 0)
-        return HttpResponseRedirect(reverse('movie:login'))
+        request.session['invalid_login'] = 'Invalid username or password.'
+
+    return HttpResponseRedirect(reverse('movie:index'))

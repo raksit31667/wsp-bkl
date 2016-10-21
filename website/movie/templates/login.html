@@ -5,9 +5,12 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title" id="login-modal-label">Login Form</h4>
+        <h4 class="modal-title" id="login-modal-label">Login</h4>
       </div>
       <div class="modal-body">
+        {% if invalid_login %}
+          <span class="text-danger small">{{ invalid_login }}</span>
+        {% endif %}
         <form action="{% url 'movie:login_api'%}" method="post">
           {% csrf_token %}
           <div class="form-group row">
@@ -20,7 +23,7 @@
           <div class="form-group row">
             <label for="input-password" class="col-xs-2 form-control-label">Password:</label>
             <div class="col-xs-10">
-              <input id="input-password" class="form-control" name="password" placeholder="Password"/>
+              <input id="input-password" class="form-control" type="password" name="password" placeholder="Password"/>
             </div>
           </div>
 
@@ -30,6 +33,10 @@
             </div>
           </div>
         </form>
+      </div>
+
+      <div class="modal-footer">
+        Don't have an account? <a id="click-here" href="#">Click here</a> to register.
       </div>
     </div>
   </div>

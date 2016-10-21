@@ -8,9 +8,6 @@
         <h4 class="modal-title" id="register-modal-label">Registration Form</h4>
       </div>
       <div class="modal-body">
-        {% if error_message %}
-          <p><strong>{{ error_message }}</strong></p>
-        {% endif %}
         <form action="{% url 'movie:index' %}" method="post">
           {% csrf_token %}
           {% include 'form_modal_template.html' %}
