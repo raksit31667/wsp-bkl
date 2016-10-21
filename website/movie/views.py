@@ -10,7 +10,11 @@ from django.contrib import messages
 def index(request):
     all_movies = Movie.objects.values_list('movie_name', flat=True)
     all_movies_list = list(all_movies)
-    return render(request, 'index.html', {'all_movies_list': mark_safe(all_movies_list)})
+    if(request.session.get('has_errors') == True):
+        request.session['has_errors'] = False
+        return render(request, 'index.html', {'all_movies_list': mark_safe(all_movies_list), 'has_errors': True})
+    else:
+        return render(request, 'index.html', {'all_movies_list': mark_safe(all_movies_list)})
 
 def login(request):
     return render(request, 'login.html')
@@ -77,8 +81,8 @@ def authenticate(username, password):
             return user
     return None
 
-def mbox(title, text, style):
-    ctypes.windll.user32.MessageBoxW(0, text, title, style)
+# def mbox(title, text, style):
+#     ctypes.windll.user32.MessageBoxW(0, text, title, style)
 
 def login_api(request):
     username = request.POST['username']
@@ -98,34 +102,34 @@ def register_api(request):
     email = request.POST['email']
     check_policy = request.POST.get('check-policy','Default')
 
-    has_errors = False
+    request.session['has_errors'] = False
 
     if does_username_exist(username):
-        has_errors = True
-        mbox('Error', 'This username is already registered.', 0)
-        return render(request, 'index.html', {'has_errors': has_errors})
+        request.session['has_errors'] = True
+        # mbox('Error', 'This username is already registered.', 0)
+        return HttpResponseRedirect(reverse('movie:index'))
 
     elif does_email_exist(email):
-        has_errors = True
-        mbox('Error', 'This email is already registered.', 0)
-        return render(request, 'index.html', {'has_errors': has_errors})
+        request.session['has_errors'] = True
+        # mbox('Error', 'This email is already registered.', 0)
+        return HttpResponseRedirect(reverse('movie:index'))
 
     elif password != confirm_password:
-        has_errors = True
-        mbox('Error', 'Your password does not match.', 0)
-        return render(request, 'index.html', {'has_errors': has_errors})
+        request.session['has_errors'] = True
+        # mbox('Error', 'Your password does not match.', 0)
+        return HttpResponseRedirect(reverse('movie:index'))
 
     elif len(password) < 6:
-        has_errors = True
-        mbox('Error', 'Your password is too short.', 0)
-        return render(request, 'index.html', {'has_errors': has_errors})
+        request.session['has_errors'] = True
+        # mbox('Error', 'Your password is too short.', 0)
+        return HttpResponseRedirect(reverse('movie:index'))
 
     elif check_policy:
-        has_errors = True
-        mbox('Error', 'Please accept our policy.', 0)
-        return render(request, 'index.html', {'has_errors': has_errors})
+        request.session['has_errors'] = True
+        # mbox('Error', 'Please accept our policy.', 0)
+        return HttpResponseRedirect(reverse('movie:index'))
 
     else:
         newUser(username, password, email)
-        mbox('Success', 'Register Completed.', 0)
-        return render(request, 'index.html')
+        # mbox('Success', 'Register Completed.', 0)
+        return HttpResponseRedirect(reverse('movie:index'))
