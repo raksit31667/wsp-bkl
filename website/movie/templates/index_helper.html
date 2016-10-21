@@ -33,8 +33,17 @@
         source: substringMatcher(typeahead_data)
       });
 
-      {% if has_errors %}
+      {% if invalid_register %}
         $('#register-modal').modal('toggle');
       {% endif %}
+
+      {% if invalid_login %}
+        $('#login-modal').modal('toggle');
+      {% endif %}
+
+      $('#click-here').click(function() {
+        $('#login-modal').modal('hide');
+        $('#register-modal').modal('toggle');
+      })
     });
 </script>
