@@ -17,7 +17,16 @@
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#login-modal">Login</button>
       {% include 'register.html' %}
       {% include 'login.html' %}
+
     </div>
+
+    <script>
+      $(document).ready(function() {
+          {% if has_errors %}
+            $('#register-modal').modal('toggle')
+          {% endif %}
+      });
+    </script>
   </body>
 
 </html>
