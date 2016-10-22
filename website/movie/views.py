@@ -135,5 +135,5 @@ def register_api(request):
         return HttpResponseRedirect(reverse('movie:index'))
 
 def showMovie(request):
-    all_movies = Movie.objects.all()
+    all_movies = Movie.objects.all()[:6]
     return render(request,'viewMovie.html',{'all_movies':all_movies})
