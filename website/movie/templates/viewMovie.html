@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html class="app-html">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BKL Movie Streaming Service</title>
+
+    {% load staticfiles %}
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'style.css' %}" rel="stylesheet">
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+  </head>
+  <body class="app-body">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <div class="row">
+      <nav class="navbar nav-style ">
+        <div class="container-fluid">
+          <div class="col-xs-2">
+            <a href="">BKL</a>
+          </div>
+          <div class="col-xs-8">
+            <center>
+              <form class="form-inline">
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="Search">
+                  <button type="submit" class="btn"><i class="glyphicon glyphicon-search"></i></button>
+                </div>
+              </form>
+            </center>
+          </div>
+          <div class=col-xs-2>
+            <button type="submit" class="btn btn-custom">Register</button>
+            <button type="submit" class="btn btn-custom">Login</button>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <div class="row">
+      <div class="col-md-2 menu-custom">
+        <ul class="side-nav">
+          <li class="list-custom"><a href="#">MY STORE</a></li>
+
+          <div class="dropdown">
+          <li class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <a href="#" class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">STORE</a>
+            <ul class="dropdown-menu dropdown-content" aria-labelledby="dropdownMenu1" >
+              <li><a href="/">Action</a></li>
+              <li><a href="/">Romance</a></li>
+            </ul>
+          </li>
+        </div>
+          <li><a href="#">REFILLMENT</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-offset-2 col-md-10 app-content">
+        <div class="row">
+          <div class="row">
+            <div class="col-md-10"><span class="topic-genre">All Movie</span></div>
+            <div class="col-md-2"><button type="button" class="btn btn-seemore ">See More</button></div>
+          </div>
+          <div class="row">
+          {%for movie in all_movies %}
+            <div class="col-xs-2">
+              <div class="card">
+                <img src={{movie.movie_thumbnail.url}} atl="image" class="img-poster">
+                <p class="movie-name">{{movie.movie_name}}</p>
+                <p class="movie-genre">{{movie.genre}}</p>
+              </div>
+            </div>
+          {% endfor %}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </body>
+</html>

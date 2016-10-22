@@ -133,3 +133,7 @@ def register_api(request):
         newUser(username, password, email)
         # mbox('Success', 'Register Completed.', 0)
         return HttpResponseRedirect(reverse('movie:index'))
+
+def showMovie(request):
+    all_movies = Movie.objects.all()
+    return render(request,'viewMovie.html',{'all_movies':all_movies})

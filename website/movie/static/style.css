@@ -1,0 +1,128 @@
+.app-body{
+  background-color: #EAEAE9;
+}
+.nav-style{
+  background-color: #900C3F;
+  margin-bottom: 0px;
+}
+
+.nav-style a{
+  font-size: 30px;
+  color: #fff;
+
+}
+
+.nav-style .form-group{
+  margin-top: 1%;
+  margin-left: 0px;
+  text-align: center;
+
+}
+
+.nav-style .form-group input{
+  background-color: #900C3F;
+  border-color: #fff;
+  color: #fff;
+}
+
+.nav-style .form-group button{
+  background-color: #900C3F;
+  border-color: #900C3F;
+  color: #fff;
+}
+
+.nav-style .btn-custom{
+  margin: 2%;
+  background-color: #900C3F;
+  border-color: #FFFFFF;
+  color: #fff;
+  vertical-align: middle;
+}
+
+.nav-style .btn-custom:hover{
+  background-color: #6A1A09;
+  border-color: #FFFFFF;
+  color: #fff;
+}
+
+.menu-custom{
+  position: fixed;
+  height: 100%;
+  border-color: #313030;
+  background-color: #313030;
+  margin-right: 5%;
+}
+
+.menu-custom a{
+  text-decoration: none;
+  list-style: none;
+  font-size: 20px;
+  line-height: 3;
+  color: #fff;
+}
+
+.menu-custom a:hover{
+  text-decoration: none;
+  list-style: none;
+  font-size: 20px;
+  line-height: 3;
+  color: #C9C7C7;
+
+}
+.menu-custom .sidebar-nav .dropdown{
+  position: relative;
+  display: inline-block;
+}
+
+.menu-custom .sidebar-nav .dropdown:after{
+  position: relative;
+  display: block;
+  content: "";
+}
+
+.menu-custom .sidebar-nav .dropdown .dropdown-content{
+  display: none;
+  position: absolute;
+  border-color: #fff;
+}
+.app-content{
+  padding-left: 50px;
+  padding-top: 20px;
+}
+.app-content .card{
+  /*border-style: solid;
+  border-color: #000;*/
+  border-width: 2px;
+  height: 400px;
+  background-color: #fff;
+  margin-top: 20px;
+}
+.app-content .card .movie-name{
+  font-size: 20px;
+  padding-left:  5px;
+}
+.app-content .card .movie-genre{
+  font-size: 15px;
+  padding-left:  5px;
+}
+
+.app-content .card img{
+  width: 100%;
+  height: 311.55px;
+  object-fit: cover;
+  overflow: hidden;
+  /*height : 311.55px;
+  width : 218.55px;*/
+}
+.app-content .topic-genre{
+  font-size: 30px;
+}
+.app-content .btn-seemore{
+  text-align: right;
+  background-color: #900C3F;
+  color: #fff;
+  border-color: #fff;
+  border-radius: 0;
+  font-size: 15px;
+  margin-top: 10px;
+}
