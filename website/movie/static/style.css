@@ -4,6 +4,7 @@
 .nav-style{
   background-color: #900C3F;
   margin-bottom: 0px;
+  position: fixed;
 }
 
 .nav-style a{
