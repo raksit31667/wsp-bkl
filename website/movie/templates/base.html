@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %} Title {% endblock %}</title>
+
+    {% load staticfiles %}
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'simple-sidebar.css' %}" rel="stylesheet">
+    <link href="{% static 'typeahead.css' %}" rel="stylesheet">
+    <link href="{% static 'style.css' %}" rel="stylesheet">
+    <script type="text/javascript" src="{% static 'jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'typeahead.bundle.js' %}"></script>
+
+  </head>
+
+  <body>
+
+    <div id="wrapper">
+
+      <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="nav sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">BKL</a>
+                </li>
+                <li>
+                    <a href="#">Library</a>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Movies <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#">Action</a></li>
+                      <li><a href="#">Comedy</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Refillment</a>
+                </li>
+
+            </ul>
+        </div>
+
+      <div class="page-content-wrapper">
+        <nav class="navbar navbar-default navbar-style navbar-fixed-top" role="navigation">
+        	<div class="container-fluid">
+        		<!-- Brand and toggle get grouped for better mobile display -->
+        		<div class="navbar-header">
+        			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+        				<span class="sr-only">Toggle navigation</span>
+        				<span class="icon-bar"></span>
+        				<span class="icon-bar"></span>
+        				<span class="icon-bar"></span>
+        			</button>
+        			<a class="navbar-brand" href="">BKL</a>
+        		</div>
+        		<!-- Collect the nav links, forms, and other content for toggling -->
+        		<div class="collapse navbar-collapse navbar-ex1-collapse">
+        			<form class="navbar-form navbar-left" role="search">
+        				<div class="form-group">
+                  <input class="typeahead" type="text" placeholder="Search...">
+        				</div>
+        				<button type="submit" class="btn btn-search"><i class="glyphicon glyphicon-search"></i></button>
+        			</form>
+        			<ul class="nav navbar-nav navbar-right">
+                <li><a href="#" data-toggle="modal" data-target="#register-modal">Register</a></li>
+                <li><a href="#" data-toggle="modal" data-target="#login-modal">Login</a></li>
+        			</ul>
+        		</div>
+        	</div>
+        </nav>
+
+          {% block content %}
+          {% endblock %}
+
+      </div>
+    </div>
+  </body>
+</html>
