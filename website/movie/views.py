@@ -117,12 +117,3 @@ def login_api(request):
         request.session['invalid_login'] = 'Invalid username or password.'
 
     return HttpResponseRedirect(reverse('movie:index'))
-
-def showMovie(request):
-    movies_all_genre = []
-    all_movies_6 = Movie.objects.all()[:6]
-    all_genres = Genre.objects.all()
-    for genre in all_genres:
-        movies_in_genre = Movie.objects.filter(genre=genre)[:6]
-        movies_all_genre.append(movies_in_genre)
-    return render(request,'viewMovie.html',{'all_movies_6':all_movies_6,'all_genres':all_genres,'movies_all_genre':movies_all_genre})
