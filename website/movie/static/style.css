@@ -1,95 +1,31 @@
-.app-body{
+body{
   background-color: #EAEAE9;
 }
-.nav-style{
+
+.navbar-style {
   background-color: #900C3F;
-  margin-bottom: 0px;
-  position: fixed;
 }
 
-.nav-style a{
-  font-size: 30px;
-  color: #fff;
-
+.navbar-style .navbar-brand {
+  font-size: 2em;
+  font-weight: bold;
+  color: white;
 }
 
-.nav-style .form-group{
-  margin-top: 1%;
-  margin-left: 0px;
-  text-align: center;
-
-}
-
-.nav-style .form-group input{
+.btn-search, .btn-search:hover, .btn-search:focus, .btn-search:active  {
+  color: white;
   background-color: #900C3F;
-  border-color: #fff;
-  color: #fff;
 }
 
-.nav-style .form-group button{
-  background-color: #900C3F;
-  border-color: #900C3F;
-  color: #fff;
+.navbar-default .navbar-nav > li > a , .navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:active, .navbar-default .navbar-nav > li > a:visited {
+    color: white;
 }
 
-.nav-style .btn-custom{
-  margin: 2%;
-  background-color: #900C3F;
-  border-color: #FFFFFF;
-  color: #fff;
-  vertical-align: middle;
+.app-content {
+  padding-top: 70px;
 }
 
-.nav-style .btn-custom:hover{
-  background-color: #6A1A09;
-  border-color: #FFFFFF;
-  color: #fff;
-}
-
-.menu-custom{
-  position: fixed;
-  height: 100%;
-  border-color: #313030;
-  background-color: #313030;
-  margin-right: 5%;
-}
-
-.menu-custom a{
-  text-decoration: none;
-  list-style: none;
-  font-size: 20px;
-  line-height: 3;
-  color: #fff;
-}
-
-.menu-custom a:hover{
-  text-decoration: none;
-  list-style: none;
-  font-size: 20px;
-  line-height: 3;
-  color: #C9C7C7;
-
-}
-.menu-custom .sidebar-nav .dropdown{
-  position: relative;
-  display: inline-block;
-}
-
-.menu-custom .sidebar-nav .dropdown:after{
-  position: relative;
-  display: block;
-  content: "";
-}
-
-.menu-custom .sidebar-nav .dropdown .dropdown-content{
-  display: none;
-  position: absolute;
-  border-color: #fff;
-}
-.app-content{
-  padding-left: 50px;
-  padding-top: 20px;
-}
 .app-content .card{
   /*border-style: solid;
   border-color: #000;*/
