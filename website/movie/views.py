@@ -15,14 +15,15 @@ class IndexView(View):
 
     def get(self, request):
         form = self.form_class(None)
-        all_movies = Movie.objects.values_list('movie_name', flat=True)
-        all_movies_list = list(all_movies)
+        all_genres = Genre.objects.all()
+        all_movies = Movie.objects.all()
+        all_movies_list = list(Movie.objects.values_list('movie_name', flat=True))
         invalid_login = request.session.get('invalid_login')
         try:
             del request.session['invalid_login']
         except KeyError:
             pass
-        return render(request, self.template_name, {'form': form, 'all_movies_list': mark_safe(all_movies_list), 'invalid_login': invalid_login})
+        return render(request, self.template_name, {'form': form, 'all_genres': all_genres, 'all_movies': all_movies, 'all_movies_list': mark_safe(all_movies_list), 'invalid_login': invalid_login})
 
     def post(self, request):
         form = self.form_class(request.POST)
@@ -119,11 +120,11 @@ def login_api(request):
     return HttpResponseRedirect(reverse('movie:index'))
 
 
-def showMovie(request):
-    movies_all_genre = []
-    all_movies_6 = Movie.objects.all()[:6]
-    all_genres = Genre.objects.all()
-    for genre in all_genres:
-        movies_in_genre = Movie.objects.filter(genre=genre)[:6]
-        movies_all_genre.append(movies_in_genre)
-    return render(request,'viewMovie.html',{'all_movies_6':all_movies_6,'all_genres':all_genres,'movies_all_genre':movies_all_genre})
+# def showMovie(request):
+#     movies_all_genre = []
+#     all_movies_6 = Movie.objects.all()[:6]
+#     all_genres = Genre.objects.all()
+#     for genre in all_genres:
+#         movies_in_genre = Movie.objects.filter(genre=genre)[:6]
+#         movies_all_genre.append(movies_in_genre)
+#     return render(request,'viewMovie.html',{'all_movies_6':all_movies_6,'all_genres':all_genres,'movies_all_genre':movies_all_genre})
