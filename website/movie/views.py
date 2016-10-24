@@ -8,6 +8,7 @@ from django.urls import reverse
 from .models import Genre, Movie
 from .forms import UserForm
 from django.http import HttpResponse, HttpResponseRedirect
+from wsgiref.util import FileWrapper
 
 class IndexView(View):
     form_class = UserForm
@@ -128,3 +129,11 @@ def login_api(request):
 #         movies_in_genre = Movie.objects.filter(genre=genre)[:6]
 #         movies_all_genre.append(movies_in_genre)
 #     return render(request,'viewMovie.html',{'all_movies_6':all_movies_6,'all_genres':all_genres,'movies_all_genre':movies_all_genre})
+
+def download_movie(request, movie_id):
+        m = Movie.objects.get(pk=movie_id)
+        file = FileWrapper(open(m.movie_file.path, 'rb'))
+        response = HttpResponse(file, content_type='application/octet-stream')
+        response['Content-Disposition'] = str('attachment; filename='+m.movie_file.name)
+        return response
+        return HttpResponseRedirect('/')
