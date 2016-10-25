@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %} BKL Movie Streaming Service {% endblock %}
+{% block content %}
+  <div class="app-content-row">
+    <span>{{movie.movie_name}}</span>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 block-center">
+      <img src="{{movie.movie_thumbnail.url}}" alt="image" class="img-poster-desc">
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+      <div class="row">
+        <iframe src="{{movie.movie_teaser_url}}" width="560" height="315" frameborder="0"></iframe>
+      </div>
+      <div class="row">
+        <button class="btn btn-green" type="button">Watch Online</button>
+        <button class="btn btn-green" type="button">Download</button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+      <p class="movie-genre">Genre : {{movie.genre}}</p>
+      <p class="movie-name">Year : {{movie.release_year}}</p>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+      <p>Description : {{movie.movie_description}}</p>
+    </div>
+  </div>
+{% endblock %}

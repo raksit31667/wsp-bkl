@@ -128,3 +128,16 @@ def login_api(request):
 #         movies_in_genre = Movie.objects.filter(genre=genre)[:6]
 #         movies_all_genre.append(movies_in_genre)
 #     return render(request,'viewMovie.html',{'all_movies_6':all_movies_6,'all_genres':all_genres,'movies_all_genre':movies_all_genre})
+
+class DescriptView(View):
+    form_class = UserForm
+    template_name = 'descrip.html'
+
+    def get(self, request, movie_id):
+        movie = Movie.objects.get(id=movie_id)
+        movie.movie_teaser_url = self.convertLink(movie.movie_teaser_url)
+        return render(request, 'descrip.html',{'movie':movie})
+
+    def convertLink(self, link):
+        str = link
+        return str.replace('watch?v=', 'embed/')

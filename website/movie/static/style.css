@@ -45,7 +45,7 @@ body{
 
 .app-content .card img{
   width: 100%;
-  height: 311.55px;
+  height: auto;
   object-fit: cover;
   overflow: hidden;
   /*height : 311.55px;
@@ -62,4 +62,10 @@ body{
   border-radius: 0;
   font-size: 15px;
   margin-top: 10px;
+}
+
+.img-poster-desc{
+  width: 70%;
+  object-fit: cover;
+  overflow: hidden;
 }
