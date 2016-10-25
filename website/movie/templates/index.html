@@ -3,7 +3,7 @@
 {% block content %}
     <div class="app-content-row">
       <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10"><span class="topic-genre">All Movies</span></div>
-      <form action="{% url 'movie:filter' 0 %}" method="post">
+      <form action="{% url 'movie:filter' 'all' 'movie_name' %}" method="post">
         {% csrf_token %}
         <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><button type="submit" class="btn btn-seemore ">See More</button></div>
       </form>
@@ -22,7 +22,7 @@
   {%for genre in all_genres %}
     <div class="app-content-row">
       <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10"><span class="topic-genre">{{genre.genre_name}}</span></div>
-      <form action="{% url 'movie:filter' genre.id %}" method="post">
+      <form action="{% url 'movie:filter' genre.genre_name|lower 'movie_name' %}" method="post">
         {% csrf_token %}
         <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><button type="submit" class="btn btn-seemore ">See More</button></div>
       </form>

@@ -8,9 +8,9 @@
         <button class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">Genre
         <span class="caret"></span></button>
         <ul class="dropdown-menu">
-            <li><a href="{% url 'movie:filter' 0 %}" onclick="form.submit();">All Movies</a></li>
+            <li><a href="{% url 'movie:filter' 'all' selected_sortby %}" onclick="form.submit();">All Movies</a></li>
           {% for genre in all_genres %}
-            <li><a href="{% url 'movie:filter' genre.id %}" onclick="form.submit();">{{genre.genre_name}}</a></li>
+            <li><a href="{% url 'movie:filter' genre.genre_name|lower selected_sortby %}" onclick="form.submit();">{{genre.genre_name}}</a></li>
           {% endfor %}
         </ul>
       </div>
@@ -21,8 +21,13 @@
         <button class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">Sortby
         <span class="caret"></span></button>
         <ul class="dropdown-menu">
-          <li><a href="#">A-Z</a></li>
-          <li><a href="#">Release Year</a></li>
+          {% if selected_genre %}
+          <li><a href="{% url 'movie:filter' selected_genre.genre_name|lower 'movie_name' %}" onclick="form.submit();">A-Z</a></li>
+          <li><a href="{% url 'movie:filter' selected_genre.genre_name|lower 'release_year' %}" onclick="form.submit();">Release Year</a></li>
+          {% else %}
+          <li><a href="{% url 'movie:filter' 'all' 'movie_name' %}" onclick="form.submit();">A-Z</a></li>
+          <li><a href="{% url 'movie:filter' 'all' 'release_year' %}" onclick="form.submit();">Release Year</a></li>
+          {% endif %}
         </ul>
       </div>
     </div>
