@@ -1,14 +1,23 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
-    <ul>
-      {% for movie in result %}
-        <li>{{movie.movie_name}}</li>
-      {% endfor %}
-    </ul>
-  </body>
-</html>
+{% extends 'base.html' %}
+{% block title %} Search Results {% endblock %}
+{% block content %}
+  <div class="app-content-row">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10"><span class="topic-genre">Search Result</span></div>
+
+  {% if result is None %}
+  <div class="col-xs-12">
+    No results found.
+  </div>
+  {% else %}
+    {% for movie in result %}
+      <div class="col-xs-8 col-sm-8 col-md-3 col-lg-3">
+        <div class="card">
+          <img src={{movie.movie_thumbnail.url}} alt="image" class="img-poster">
+          <p class="movie-name">{{movie.movie_name}}</p>
+          <p class="movie-genre">{{movie.genre}}</p>
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
+  </div>
+{% endblock %}

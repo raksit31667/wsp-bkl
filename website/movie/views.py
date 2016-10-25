@@ -81,8 +81,11 @@ def filter(request):
 
 def search_movie(request):
     input = request.POST['typeahead']
-    result = Movie.objects.filter(movie_name__icontains=input)
-    return render(request, 'search.html', {'result':result})
+    if len(input) == 0 :
+        result = None
+    else:
+        result = Movie.objects.filter(movie_name__icontains=input)
+    return render(request, 'search.html', {'result':result}, {'input':input})
 
 
 def does_username_exist(username):
