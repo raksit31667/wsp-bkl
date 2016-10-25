@@ -45,11 +45,11 @@ body{
 
 .app-content .card img{
   width: 100%;
-  height: auto;
+  height : 311.55px;
+  /*height: auto;*/
   object-fit: cover;
   overflow: hidden;
-  /*height : 311.55px;
-  width : 218.55px;*/
+  /*width : 218.55px;*/
 }
 .app-content .topic-genre{
   font-size: 30px;
