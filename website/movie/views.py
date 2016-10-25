@@ -42,49 +42,31 @@ class IndexView(View):
         all_movies_list = list(all_movies)
         return render(request, self.template_name, {'form': form, 'all_movies_list': mark_safe(all_movies_list), 'invalid_register': True})
 
-def filter(request, genre_id):
+def filter(request, genre, sortby):
     all_genres = Genre.objects.all()
 
-    if genre_id == '0':
-        selected_movies = Movie.objects.all()
-        selected_genre = None
+    if sortby:
+        if genre == 'all':
+            selected_movies = Movie.objects.order_by(sortby)
+            selected_genre = None
+
+        else:
+            genre_id = Genre.objects.get(genre_name__iexact=genre).id
+            selected_movies = Movie.objects.filter(genre_id=genre_id).order_by(sortby)
+            selected_genre = Genre.objects.get(pk=genre_id)
 
     else:
-        selected_movies = Movie.objects.filter(genre_id=genre_id)
-        selected_genre = Genre.objects.get(pk=genre_id)
+        if genre == 'all':
+            selected_movies = Movie.objects.all()
+            selected_genre = None
 
-    return render(request, 'filter.html', {'all_genres': all_genres, 'selected_movies': selected_movies, 'selected_genre': selected_genre})
+        else:
+            genre_id = Genre.objects.get(genre_name__iexact=genre).id
+            selected_movies = Movie.objects.filter(genre_id=genre_id)
+            selected_genre = Genre.objects.get(pk=genre_id)
 
-    # # select the dropdown_sortby
-    # if request.POST.get('dropdown_sortby'):
-    #     request.session['selected_sortby'] = request.POST.get('dropdown_sortby')
-    #     selected_sortby = request.session.get('selected_sortby')
-    #     if not request.session.get('selected_genre_id'):
-    #         all_movies = Movie.objects.order_by(request.session.get('selected_sortby'))
-    #
-    #     else:
-    #         all_movies = Movie.objects.filter(genre_id=request.session.get('selected_genre_id')).order_by(request.session.get('selected_sortby'))
-    #
-    # # select the dropdown_genre
-    # if request.POST.get('dropdown_genre'):
-    #     request.session['selected_genre_id'] = request.POST.get('dropdown_genre')
-    #     selected_sortby = request.session.get('selected_sortby')
-    #     if not request.session.get('selected_sortby'):
-    #         request.session['selected_sortby'] = "movie_name"
-    #
-    #     # select the dropdown_genre except "All Movies"
-    #     if request.POST.get('dropdown_genre') != '0':
-    #         selected_genre = Genre.objects.get(pk=request.session.get('selected_genre_id'))
-    #         all_movies = Movie.objects.filter(genre_id=request.session.get('selected_genre_id')).order_by(request.session.get('selected_sortby'))
-    #
-    #     else:
-    #         all_movies = Movie.objects.order_by(request.session.get('selected_sortby'))
-    #
-    # # first time
-    # if not request.POST.get('dropdown_genre') and not request.POST.get('dropdown_sortby'):
-    #     all_movies = Movie.objects.all()
-    #
-    # return render(request, 'filter.html', {'all_genres': all_genres, 'all_movies': all_movies, 'selected_genre': selected_genre, 'selected_sortby': selected_sortby})
+
+    return render(request, 'filter.html', {'all_genres': all_genres, 'selected_movies': selected_movies, 'selected_genre': selected_genre, 'selected_sortby': sortby})
 
 def search_movie(request):
     input = request.POST['typeahead']
@@ -111,15 +93,6 @@ def newUser(username, password, email):
     user = User.objects.create_user(username, email, password)
     user.save()
 
-# def authenticate(username, password):
-#     for user in User.objects.all():
-#         if (user.get_username() == username and user.check_password(password)):
-#             return user
-#     return None
-
-# def mbox(title, text, style):
-#     ctypes.windll.user32.MessageBoxW(0, text, title, style)
-
 def login_api(request):
     username = request.POST['username']
     password = request.POST['password']
@@ -135,16 +108,6 @@ def login_api(request):
         request.session['invalid_login'] = 'Invalid username or password.'
 
     return HttpResponseRedirect(reverse('movie:index'))
-
-
-# def showMovie(request):
-#     movies_all_genre = []
-#     all_movies_6 = Movie.objects.all()[:6]
-#     all_genres = Genre.objects.all()
-#     for genre in all_genres:
-#         movies_in_genre = Movie.objects.filter(genre=genre)[:6]
-#         movies_all_genre.append(movies_in_genre)
-#     return render(request,'viewMovie.html',{'all_movies_6':all_movies_6,'all_genres':all_genres,'movies_all_genre':movies_all_genre})
 
 def download_movie(request, movie_id):
         m = Movie.objects.get(pk=movie_id)
