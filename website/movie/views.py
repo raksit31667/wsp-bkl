@@ -79,6 +79,12 @@ def filter(request):
 
     return render(request, 'filter.html', {'all_genres': all_genres, 'all_movies': all_movies, 'selected_genre': selected_genre, 'selected_sortby': selected_sortby})
 
+def search_movie(request):
+    input = request.POST['typeahead']
+    result = Movie.objects.filter(movie_name__icontains=input)
+    return render(request, 'search.html', {'result':result})
+
+
 def does_username_exist(username):
     for user in User.objects.all():
         if (user.get_username() == username):
