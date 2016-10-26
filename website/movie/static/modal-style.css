@@ -1,0 +1,27 @@
+.modal-header{
+  background-color: #df2027;
+}
+
+.modal-body{
+  background-color: #333333;
+  padding: 10% 15%;
+}
+
+.modal-body label{
+  color: #FFF;
+  font-weight: bold;
+}
+
+.modal-body button{
+  padding: 5% 0;
+}
+
+.modal-body .modal-input-field{
+  margin-bottom: 50px;
+}
+
+.modal-title{
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+}
