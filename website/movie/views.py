@@ -119,12 +119,12 @@ def register_api(request):
     password = request.POST.get('password', None)
     email = request.POST.get('email', None)
 
-    if does_username_exist(username):
-        message = "This username already exist"
-        registerable = False
-
     if does_email_exist(email):
         message = "This email is already registered"
+        registerable = False
+
+    if does_username_exist(username):
+        message = "This username already exist"
         registerable = False
 
     if registerable:
