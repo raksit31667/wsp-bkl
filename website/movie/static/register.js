@@ -67,6 +67,7 @@ function getCookie(name) {
           data : {username: username, email: email, password: password},
           success : function(response){
             alert(response.msg);
+          
           }
         });
       }

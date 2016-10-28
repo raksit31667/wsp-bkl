@@ -41,7 +41,7 @@ function getCookie(name) {
         data : {username: username, password: password},
         success : function(response){
           if(response.loginable == true){
-            window.location.href = "/movie";
+            window.location.reload()
           }
           else{
             $("#login-error-message").text(response.msg);
