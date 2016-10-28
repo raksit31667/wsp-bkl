@@ -66,8 +66,12 @@ function getCookie(name) {
           type : 'POST',
           data : {username: username, email: email, password: password},
           success : function(response){
-            alert(response.msg);
-          
+            err.text(msg);
+            if(response.resgisterable){
+              $('#register-modal').modal('hide');
+              $('#login-modal').modal('toggle');
+              alert(response.msg);
+            }
           }
         });
       }
