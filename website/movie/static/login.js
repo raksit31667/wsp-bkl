@@ -44,7 +44,7 @@ function getCookie(name) {
             window.location.href = "/";
           }
           else{
-            $("#error-message").text(response.msg);
+            $("#login-error-message").text(response.msg);
           }
         }
       });

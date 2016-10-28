@@ -113,6 +113,15 @@ def login_api(request):
 
     return JsonResponse({'status':status, 'msg': message})
 
+def register_api(request):
+    status = 0
+    message = "success"
+    username = request.POST.get('username', None)
+    password = request.POST.get('password', None)
+    email = request.POST.get('email', None)
+
+    return JsonResponse({'status':status, 'msg': message})
+
 def download_movie(request, movie_id):
         m = Movie.objects.get(pk=movie_id)
         file = FileWrapper(open(m.movie_file.path, 'rb'))
