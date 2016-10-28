@@ -1,47 +1,54 @@
-$(function() {
-  $("#login-form").submit(function( event ) {
-    event.preventDefault();
-    var username = $("#login-username").val();
-    var password = $('#login-password').val();
-
-    $.ajax({
-      url : '/movie/api/login/',
-      type : 'GET',
-      data : {username: username, password: password},
-      success : function(response){
-        if(response.data == 1){
-          window.location.href = "/";
-        }
-        else{
-          $("#error-message").text(response.msg);
+function getCookie(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie != '') {
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = jQuery.trim(cookies[i]);
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) == (name + '=')) {
+        cookieValue = decodeURIComponent(
+          cookie.substring(name.length + 1));
+          break;
         }
       }
-    });
+    }
+    return cookieValue;
+  }
 
-    // Post to Server
-    // $.ajax({
-    // 	type: "POST",
-    // 	url: "http://localhost:4000/login",
-    //
-    // 	data: JSON.stringify({
-    // 		username: username,
-    // 		password: password
-    // 	}),
-    // 	contentType: "application/json; charset=utf-8",
-    //     dataType: "json",
-    //     success: function(data){
-    //     	if(data.msg === 'done') {
-    //     		window.location.href = "/";
-    //     	}
-    //
-    //     	if(data.error) {
-    //     		$('.error-message').text(data.error);
-    //     	}
-    //     },
-    //   error: function(data) {
-    //   	console.log(data);
-    //   }
-    // });
+  var csrftoken = getCookie('csrftoken');
+
+  function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+  }
+  $.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+      if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+      }
+    }
   });
 
-});
+  $(function() {
+    $("#login-form").submit(function( event ) {
+      event.preventDefault();
+      var username = $("#login-username").val();
+      var password = $('#login-password').val();
+
+      $.ajax({
+        url : '/movie/api/login/',
+        type : 'POST',
+        data : {username: username, password: password},
+        success : function(response){
+          if(response.data == 1){
+            window.location.href = "/";
+          }
+          else{
+            $("#error-message").text(response.msg);
+          }
+        }
+      });
+
+    });
+
+  });

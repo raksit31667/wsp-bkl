@@ -97,8 +97,8 @@ def newUser(username, password, email):
 def login_api(request):
     status = 0
     message = "success"
-    username = request.GET.get('username', None)
-    password = request.GET.get('password', None)
+    username = request.POST.get('username', None)
+    password = request.POST.get('password', None)
     auth_user = authenticate(username=username, password=password)
     request.session['invalid_login'] = None
     if(auth_user is not None):
