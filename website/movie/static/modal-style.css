@@ -4,7 +4,7 @@
 
 .modal-body{
   background-color: #333333;
-  padding: 10% 15%;
+  padding: 5% 10%;
 }
 
 .modal-body label{
@@ -13,11 +13,11 @@
 }
 
 .modal-body button{
-  padding: 5% 0;
+  padding: 10px 0;
 }
 
 .modal-body .modal-input-field{
-  margin-bottom: 50px;
+  margin-bottom: 20px;
 }
 
 .modal-title{
