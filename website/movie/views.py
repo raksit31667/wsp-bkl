@@ -120,6 +120,10 @@ def register_api(request):
     password = request.POST.get('password', None)
     email = request.POST.get('email', None)
 
+    print(username)
+    print(password)
+    print(email)
+
     return JsonResponse({'status':status, 'msg': message})
 
 def download_movie(request, movie_id):

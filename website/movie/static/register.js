@@ -66,12 +66,7 @@ function getCookie(name) {
           type : 'POST',
           data : {username: username, email:email, password: password},
           success : function(response){
-            if(response.data == 1){
-              window.location.href = "/";
-            }
-            else{
-              $("#register-error-message").text(response.msg);
-            }
+            alert(response.msg);
           }
         });
       }
