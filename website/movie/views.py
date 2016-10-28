@@ -9,6 +9,7 @@ from .models import Genre, Movie
 from .forms import UserForm
 from django.http import HttpResponse, HttpResponseRedirect
 from wsgiref.util import FileWrapper
+from django.http import JsonResponse
 
 class IndexView(View):
     form_class = UserForm
@@ -94,20 +95,23 @@ def newUser(username, password, email):
     user.save()
 
 def login_api(request):
-    username = request.POST['username']
-    password = request.POST['password']
+    status = 0
+    message = "success"
+    username = request.GET.get('username', None)
+    password = request.GET.get('password', None)
     auth_user = authenticate(username=username, password=password)
     request.session['invalid_login'] = None
     if(auth_user is not None):
         if auth_user.is_active:
             login(request, auth_user)
+            status = 1
         else:
-            request.session['invalid_login'] = 'Your account has been disabled.'
+            message = 'Your account has been disabled.'
 
     else:
-        request.session['invalid_login'] = 'Invalid username or password.'
+        message = 'Invalid username or password.'
 
-    return HttpResponseRedirect(reverse('movie:index'))
+    return JsonResponse({'status':status, 'msg': message})
 
 def download_movie(request, movie_id):
         m = Movie.objects.get(pk=movie_id)
