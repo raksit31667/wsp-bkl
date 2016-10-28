@@ -13,6 +13,7 @@
       <div class="modal-body">
         <span class="text-danger small" id="login-error-message"></span>
         <form class="form-horizontal" id="login-form">
+          {% csrf_token %}
           <div class = "modal-input-field">
             <div class="form-group">
               <label for="login-username" class="col-sm-12 col-md-2 control-label">USERNAME</label>

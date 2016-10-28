@@ -95,36 +95,45 @@ def newUser(username, password, email):
     user.save()
 
 def login_api(request):
-    status = 0
+    loginable = False
     message = "success"
     username = request.POST.get('username', None)
     password = request.POST.get('password', None)
     auth_user = authenticate(username=username, password=password)
-    request.session['invalid_login'] = None
     if(auth_user is not None):
         if auth_user.is_active:
             login(request, auth_user)
-            status = 1
+            loginable = True
         else:
             message = 'Your account has been disabled.'
 
     else:
         message = 'Invalid username or password.'
 
-    return JsonResponse({'status':status, 'msg': message})
+    return JsonResponse({'loginable':loginable, 'msg': message})
 
 def register_api(request):
-    status = 0
+    registerable = True
     message = "success"
     username = request.POST.get('username', None)
     password = request.POST.get('password', None)
     email = request.POST.get('email', None)
 
-    print(username)
-    print(password)
-    print(email)
+    if does_username_exist(username):
+        message = "This username already exist"
+        registerable = False
 
-    return JsonResponse({'status':status, 'msg': message})
+    if does_email_exist(email):
+        message = "This email is already registered"
+        registerable = False
+
+    if registerable:
+        print(username)
+        print(password)
+        print(email)
+        newUser(username, password, email)
+
+    return JsonResponse({'registerable':registerable, 'msg': message})
 
 def download_movie(request, movie_id):
         m = Movie.objects.get(pk=movie_id)

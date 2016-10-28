@@ -64,7 +64,7 @@ function getCookie(name) {
         $.ajax({
           url : '/movie/api/register/',
           type : 'POST',
-          data : {username: username, email:email, password: password},
+          data : {username: username, email: email, password: password},
           success : function(response){
             alert(response.msg);
           }
