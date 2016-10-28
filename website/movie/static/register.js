@@ -66,11 +66,12 @@ function getCookie(name) {
           type : 'POST',
           data : {username: username, email: email, password: password},
           success : function(response){
-            err.text(msg);
-            if(response.resgisterable){
+            if(response.registerable){
               $('#register-modal').modal('hide');
               $('#login-modal').modal('toggle');
               alert(response.msg);
+            }else{
+              err.text(response.msg);
             }
           }
         });
