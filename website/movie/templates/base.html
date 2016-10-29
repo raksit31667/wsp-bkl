@@ -69,7 +69,7 @@
         			<ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
                 <li><a>{{user.username}}</a></li>
-                <li><a href="#" >Logout</a></li>
+                <li><a href="{% url 'movie:logout_api' %}">Logout</a></li>
                 {% else %}
                 <li><a href="#" data-toggle="modal" data-target="#register-modal">Register</a></li>
                 <li><a href="#" data-toggle="modal" data-target="#login-modal">Login</a></li>

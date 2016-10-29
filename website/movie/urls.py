@@ -5,6 +5,7 @@ app_name = 'movie'
 urlpatterns = [
     url(r'^$', views.IndexView.as_view(), name='index'),
     url(r'^api/login/$', views.login_api, name="login_api"),
+    url(r'^api/logout/$', views.logout_api, name="logout_api"),
     url(r'^api/register/$', views.register_api, name="login_api"),
     url(r'^filter//?genre=(?P<genre>[\w\-]+)//?sortby=(?P<sortby>[\w\-]+)/$', views.filter, name="filter"),
     url(r'^search/$', views.search_movie, name="search"),
