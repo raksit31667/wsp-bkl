@@ -1,38 +1,53 @@
 {% extends 'base.html' %}
 {% block title %} BKL Movie Streaming Service {% endblock %}
 {% block content %}
+  <div class="app-content-desc">
   <div class="app-content-row">
-    <span>{{movie.movie_name}}</span>
+    <span class="topic-style">{{movie.movie_name}}</span>
   </div>
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 block-center">
-      <img src="{{movie.movie_thumbnail.url}}" alt="image" class="img-poster-desc">
+      <div class="img-wrapper">
+        <img src="{{movie.movie_thumbnail.url}}" alt="image" class="img-poster-desc center-block">
+      </div>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-      <div class="row">
-        <iframe src="{{movie.movie_teaser_url}}" width="560" height="315" frameborder="0"></iframe>
-      </div>
-      <div class="row">
-        <button class="btn btn-green" type="button" data-toggle="modal"
-        data-target="#watchOnline">Watch Online</button>
-        <div id="watchOnline" class="modal fade" role="dialog">
-          <div class="modal-dialog">
-            <video controls preload=metadata width=720 height=400 poster="Edge.jpg">
-                <source src="{{movie.movie_file.url}}" type="video/mp4">
-            </video>
-          </div>
+      <div class="right-block">
+        <div class="row cell">
+          <iframe src="{{movie.movie_teaser_url}}" width="560" height="315" frameborder="0"></iframe>
         </div>
-        <button class="btn btn-green" type="button"><a href="{% url 'movie:download_api' movie.id%}">Download</a></button>
+        <div class="row cell">
+          <button class="btn btn-green" type="button" data-toggle="modal"
+          data-target="#watchOnline"><span class="glyphicon glyphicon-play"></span> Watch Online</button>
+          <div id="watchOnline" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <video controls preload=metadata width=720 height=400 poster="Edge.jpg">
+                  <source src="{{movie.movie_file.url}}" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <a class="btn btn-green" href="{% url 'movie:download_api' movie.id%}"><span class="glyphicon glyphicon-save"></span> Download</a>
+        </div>
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row desc-style">
     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-      <p class="movie-genre">Genre : {{movie.genre}}</p>
-      <p class="movie-name">Year : {{movie.release_year}}</p>
+      <p>
+        <span class="movie-genre">Genre : </span>
+        <span>{{movie.genre}}</span>
+      </p>
+      <p>
+        <span class="movie-year">Year : </span>
+        <span>{{movie.release_year}}</span>
+      </p>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-      <p>Description : {{movie.movie_description}}</p>
+      <p>
+        <span class="movie-desc">Description : </span>
+        <span>{{movie.movie_description}}</span>
+      </p>
     </div>
   </div>
+</div>
 {% endblock %}
