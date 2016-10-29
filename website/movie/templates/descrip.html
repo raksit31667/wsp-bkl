@@ -22,7 +22,7 @@
             </video>
           </div>
         </div>
-        <button class="btn btn-green" type="button">Download</button>
+        <button class="btn btn-green" type="button"><a href="{% url 'movie:download_api' movie.id%}">Download</a></button>
       </div>
     </div>
   </div>
