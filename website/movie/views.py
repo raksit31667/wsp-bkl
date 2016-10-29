@@ -135,6 +135,10 @@ def register_api(request):
 
     return JsonResponse({'registerable':registerable, 'msg': message})
 
+def logout_api(request):
+    logout(request)
+    return HttpResponseRedirect('/movie')
+
 def download_movie(request, movie_id):
         m = Movie.objects.get(pk=movie_id)
         file = FileWrapper(open(m.movie_file.path, 'rb'))
