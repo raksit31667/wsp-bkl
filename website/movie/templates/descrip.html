@@ -14,7 +14,9 @@
     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
       <div class="right-block">
         <div class="row cell">
-          <iframe src="{{movie.movie_teaser_url}}" width="560" height="315" frameborder="0"></iframe>
+          <div class="instrinsic-container">
+            <iframe src="{{movie.movie_teaser_url}}" ></iframe>
+          </div>
         </div>
         <div class="row cell">
           <button class="btn btn-green" type="button" data-toggle="modal"
@@ -51,3 +53,4 @@
   </div>
 </div>
 {% endblock %}
+ <!-- width="560" height="315" frameborder="0" -->
