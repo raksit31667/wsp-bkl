@@ -139,13 +139,14 @@ def logout_api(request):
     logout(request)
     return HttpResponseRedirect('/movie')
 
-def download_movie(request, movie_id):
+def download_api(request, movie_id):
+    if(request.user.is_authenticated()):
         m = Movie.objects.get(pk=movie_id)
         file = FileWrapper(open(m.movie_file.path, 'rb'))
         response = HttpResponse(file, content_type='application/octet-stream')
         response['Content-Disposition'] = str('attachment; filename='+m.movie_file.name)
         return response
-        return HttpResponseRedirect('/')
+    return HttpResponse("Please Login")
 
 class DescriptView(View):
     form_class = UserForm
