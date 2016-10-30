@@ -24,8 +24,15 @@ body{
 
 .app-content {
   padding-top: 70px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
-
+.app-content-desc{
+  background-color: #fff;
+  padding-left: 20px;
+  padding-top: 10px;
+  padding-right: 20px;
+}
 .app-content .card{
   /*border-style: solid;
   border-color: #000;*/
@@ -63,9 +70,61 @@ body{
   font-size: 15px;
   margin-top: 10px;
 }
-
-.img-poster-desc{
-  width: 70%;
+.app-content .img-wrapper{
+  display: block;
+  position: relative;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+.app-content .img-wrapper .img-poster-desc{
+  width: 80%;
+  /*max-width: 220px;*/
   object-fit: cover;
   overflow: hidden;
+  vertical-align: middle;
+}
+.app-content .img-wrapper img{
+  /*vertical-align: middle;*/
+  text-align: center;
+}
+.app-content .topic-style{
+  font-size: 30px;
+  font-family:sans-serif;
+  font-weight: bold;
+}
+.app-content .btn-green{
+  background-color: #4caf50;
+  min-width: 200px;
+  color: #fff;
+  margin: 1rem;
+}
+.app-content .btn-green:hover{
+  background-color: #43a047;
+}
+.app-content .right-block{
+  display: block;
+  margin: 1rem;
+}
+.app-content .right-block .cell{
+  display: block;
+  text-align: center;
+}
+.app-content .desc-style{
+  font-size: 25px;
+}
+.app-content .desc-style .movie-genre , .movie-year , .movie-desc{
+  font-weight: bold;
+}
+.app-content .right-block .cell .instrinsic-container{
+  position: relative;
+  height:0;
+  overflow: hidden;
+  padding-bottom: 56.25%;
+}
+.app-content .right-block .cell .instrinsic-container iframe{
+  position: absolute;;
+  top:0;
+  left:0;
+  width: 100%;
+  height: 100%;
 }
