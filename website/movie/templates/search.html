@@ -10,13 +10,7 @@
   </div>
   {% else %}
     {% for movie in result %}
-      <div class="col-xs-8 col-sm-8 col-md-3 col-lg-3">
-        <div class="card">
-          <img src={{movie.movie_thumbnail.url}} alt="image" class="img-poster">
-          <p class="movie-name">{{movie.movie_name}}</p>
-          <p class="movie-genre">{{movie.genre}}</p>
-        </div>
-      </div>
+      {% include "card.html" %}
     {% endfor %}
   {% endif %}
   </div>
