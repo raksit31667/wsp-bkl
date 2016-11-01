@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^filter//?genre=(?P<genre>[\w\-]+)//?sortby=(?P<sortby>[\w\-]+)/$', views.filter, name="filter"),
     url(r'^search/$', views.search_movie, name="search"),
     url(r'^([0-9]+)/$',views.DescriptView.as_view() , name='description'),
+    url(r'^movies/$',views.movies , name='movies'),
 ]
