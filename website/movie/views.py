@@ -17,15 +17,28 @@ class IndexView(View):
     template_name = 'index.html'
 
     def get(self, request):
-        form = self.form_class(None)
+        # form = self.form_class(None)
+        # all_genres = Genre.objects.all()
+        # all_movies = Movie.objects.all()
+        # invalid_login = request.session.get('invalid_login')
+        # try:
+        #     del request.session['invalid_login']
+        # except KeyError:
+        #     pass
+        # return render(request, self.template_name, {'form': form, 'all_genres': all_genres, 'all_movies': all_movies, 'invalid_login': invalid_login})
+        number_of_card_in_row = 4
+
+        genre_movies = {}
+        all_movies = Movie.objects.all()[:number_of_card_in_row]
         all_genres = Genre.objects.all()
-        all_movies = Movie.objects.all()
-        invalid_login = request.session.get('invalid_login')
-        try:
-            del request.session['invalid_login']
-        except KeyError:
-            pass
-        return render(request, self.template_name, {'form': form, 'all_genres': all_genres, 'all_movies': all_movies, 'invalid_login': invalid_login})
+        for genre in all_genres:
+            movies_in_genre = Movie.objects.filter(genre=genre)[:number_of_card_in_row]
+            genre_movies[genre.genre_name] = movies_in_genre
+
+        return render(request, self.template_name, {'all_genres': all_genres, 'all_movies': all_movies, 'genre_movies':genre_movies})
+
+
+
 
     def post(self, request):
         form = self.form_class(request.POST)
