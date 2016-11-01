@@ -20,7 +20,7 @@
         </div>
         {% if user.is_authenticated %}
         <div class="row cell">
-          <button class="btn btn-green" type="button" data-toggle="modal"
+          <button id = "clickWatch" class="btn btn-green" type="button" data-toggle="modal"
           data-target="#watchOnline"><span class="glyphicon glyphicon-play"></span> Watch Online</button>
 
           <a class="btn btn-green" href="{% url 'movie:download_api' movie.id%}"><span class="glyphicon glyphicon-save"></span> Download</a>
@@ -48,17 +48,27 @@
     </div>
   </div>
 </div>
+
 {% endblock %}
 
 {% block player %}
 <div id="watchOnline" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
-      <video controls preload=metadata poster="{{movie.movie_thumbnail.url}}">
+      <video id = "iframe" controls preload=metadata poster="{{movie.movie_thumbnail.url}}">
           <source src="{{movie.movie_file.url}}" type="video/mp4">
       </video>
     </div>
   </div>
 </div>
+<script>
+$(function(){
+    $('#watchOnline').modal({
+        show: false
+    }).on('hidden.bs.modal', function(){
+        $(this).find('video')[0].pause();
+    });
+});
+</script>
 {% endblock %}
  <!-- width="560" height="315" frameborder="0" -->

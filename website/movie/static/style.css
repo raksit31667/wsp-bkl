@@ -132,9 +132,5 @@ body{
 video {
   max-width: 100%;
   height: auto;
-  background:transparent url('{{movie.movie_thumbnail.url}}') no-repeat 0 0; 
-   -webkit-background-size:cover;
-   -moz-background-size:cover;
-   -o-background-size:cover;
-   background-size:cover;
+  background:transparent url('{{movie.movie_thumbnail.url}}');
 }
