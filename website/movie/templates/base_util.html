@@ -1,4 +1,5 @@
 <script type="text/javascript">
+// ---- Search bar ---- //
   var substringMatcher = function(strs) {
     return function findMatches(q, cb) {
       var matches, substringRegex;
@@ -22,6 +23,7 @@
   };
 
   var typeahead_data = {{ all_movies_list }};
+
     $(function () {
       $('.typeahead').typeahead({
         hint: true,
@@ -32,6 +34,8 @@
         name: 'movies',
         source: substringMatcher(typeahead_data)
       });
+
+// ---- Modals ---- //
 
       {% if invalid_register %}
         $('#register-modal').modal('toggle');
