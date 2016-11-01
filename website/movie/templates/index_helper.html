@@ -25,7 +25,6 @@ $.ajax({
   url : '/movie/movies/',
   type : 'GET',
   success : function(response){
-    alert(response.movies)
     doAfterGetData(response.movies);
   }
 });
