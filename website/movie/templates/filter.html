@@ -7,7 +7,7 @@
       <div class="dropdown">
         <button class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">Genre
         <span class="caret"></span></button>
-        <ul class="dropdown-menu">
+        <ul class="dropdown-menu dropdown-filter">
             <li><a href="{% url 'movie:filter' 'all' selected_sortby %}" onclick="form.submit();">All Movies</a></li>
           {% for genre in all_genres %}
             <li><a href="{% url 'movie:filter' genre.genre_name|lower selected_sortby %}" onclick="form.submit();">{{genre.genre_name}}</a></li>
