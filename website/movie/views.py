@@ -31,17 +31,12 @@ class IndexView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             user.set_password(password)
             user.save()
-            all_movies = Movie.objects.values_list('movie_name', flat=True)
-            all_movies_list = list(all_movies)
-            return render(request, self.template_name, {'form': form, 'all_movies_list': mark_safe(all_movies_list)})
+            return render(request, self.template_name, {'form': form})
 
-        all_movies = Movie.objects.values_list('movie_name', flat=True)
-        all_movies_list = list(all_movies)
-        return render(request, self.template_name, {'form': form, 'all_movies_list': mark_safe(all_movies_list), 'invalid_register': True})
+        return render(request, self.template_name, {'form': form, 'invalid_register': True})
 
 def filter(request, genre, sortby):
     all_genres = Genre.objects.all()
