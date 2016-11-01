@@ -1,5 +1,5 @@
 from .models import Genre, Movie
-import json
+from django.utils.safestring import mark_safe
 
 def base_util(request):
     all_genres = Genre.objects.all()
@@ -7,5 +7,5 @@ def base_util(request):
 
     return {
         'all_genres': all_genres,
-        'all_movies_list': json.dumps(all_movies_list),
+        'all_movies_list': mark_safe(all_movies_list),
     }
