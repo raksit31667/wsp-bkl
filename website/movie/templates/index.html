@@ -8,7 +8,7 @@
         <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><button type="submit" class="btn btn-seemore ">See More</button></div>
       </form>
 
-    {% for movie in all_movies %}
+    {% for movie in all_movies|slice:":4" %}
       {% include "card.html" %}
     {% endfor %}
     </div>
@@ -21,7 +21,7 @@
         <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><button type="submit" class="btn btn-seemore ">See More</button></div>
       </form>
 
-      {% for movie in all_movies %}
+      {% for movie in all_movies|slice:":4" %}
         {% if movie.genre == genre %}
           {% include "card.html" %}
         {% endif %}
