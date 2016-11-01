@@ -1,5 +1,6 @@
 .modal-header{
-  background-color: #df2027;
+  color: white;
+  background-color: #900C3F;
 }
 
 .modal-body{
@@ -24,4 +25,29 @@
   font-size: 30px;
   font-weight: bold;
   text-align: center;
+}
+
+.btn-modal {
+  color: white;
+  background-color: #900C3F;
+}
+
+.btn-modal:hover {
+  color: white;
+  background-color: #68082d;
+}
+
+.btn-modal:active {
+  color: white;
+  background-color: #900C3F;
+}
+
+.btn-modal:focus {
+  color: white;
+  background-color: #900C3F;
+}
+
+.btn-modal:active:hover {
+  color: white;
+  background-color: #68082d;
 }
