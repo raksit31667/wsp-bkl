@@ -10,6 +10,7 @@ from .forms import UserForm
 from django.http import HttpResponse, HttpResponseRedirect
 from wsgiref.util import FileWrapper
 from django.http import JsonResponse
+import json
 
 class IndexView(View):
     form_class = UserForm
@@ -19,13 +20,12 @@ class IndexView(View):
         form = self.form_class(None)
         all_genres = Genre.objects.all()
         all_movies = Movie.objects.all()
-        all_movies_list = list(Movie.objects.values_list('movie_name', flat=True))
         invalid_login = request.session.get('invalid_login')
         try:
             del request.session['invalid_login']
         except KeyError:
             pass
-        return render(request, self.template_name, {'form': form, 'all_genres': all_genres, 'all_movies': all_movies, 'all_movies_list': mark_safe(all_movies_list), 'invalid_login': invalid_login})
+        return render(request, self.template_name, {'form': form, 'all_genres': all_genres, 'all_movies': all_movies, 'invalid_login': invalid_login})
 
     def post(self, request):
         form = self.form_class(request.POST)
@@ -160,3 +160,7 @@ class DescriptView(View):
     def convertLink(self, link):
         str = link
         return str.replace('watch?v=', 'embed/')
+
+def movies(request):
+    movies = list(Movie.objects.values_list('movie_name', flat=True))
+    return JsonResponse({'movies':movies})

@@ -1,4 +1,5 @@
 <script type="text/javascript">
+<<<<<<< HEAD:website/movie/templates/base_util.html
 // ---- Search bar ---- //
   var substringMatcher = function(strs) {
     return function findMatches(q, cb) {
@@ -49,5 +50,63 @@
         $('#login-modal').modal('hide');
         $('#register-modal').modal('toggle');
       })
+=======
+var substringMatcher = function(strs) {
+  return function findMatches(q, cb) {
+    var matches, substringRegex;
+
+    // an array that will be populated with substring matches
+    matches = [];
+
+    // regex used to determine if a string contains the substring `q`
+    substrRegex = new RegExp(q, 'i');
+
+    // iterate through the pool of strings and for any string that
+    // contains the substring `q`, add it to the `matches` array
+    $.each(strs, function(i, str) {
+      if (substrRegex.test(str)) {
+        matches.push(str);
+      }
     });
+
+    cb(matches);
+  };
+};
+
+$.ajax({
+  url : '/movie/movies/',
+  type : 'GET',
+  success : function(response){
+    doAfterGetData(response.movies);
+  }
+});
+
+function doAfterGetData(movies){
+  var typeahead_data = movies;
+  $(function () {
+    $('.typeahead').typeahead({
+      hint: true,
+      highlight: true,
+      minLength: 1
+    },
+    {
+      name: 'movies',
+      source: substringMatcher(typeahead_data)
+>>>>>>> master:website/movie/templates/index_helper.html
+    });
+
+    {% if invalid_register %}
+    $('#register-modal').modal('toggle');
+    {% endif %}
+
+    {% if invalid_login %}
+    $('#login-modal').modal('toggle');
+    {% endif %}
+
+    $('#click-here').click(function() {
+      $('#login-modal').modal('hide');
+      $('#register-modal').modal('toggle');
+    })
+  });
+}
 </script>
