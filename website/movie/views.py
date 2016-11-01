@@ -148,14 +148,14 @@ def download_api(request, movie_id):
         return response
     return HttpResponse("Please Login")
 
-class DescriptView(View):
+class DescriptionView(View):
     form_class = UserForm
-    template_name = 'descrip.html'
+    template_name = 'description.html'
 
     def get(self, request, movie_id):
         movie = Movie.objects.get(id=movie_id)
         movie.movie_teaser_url = self.convertLink(movie.movie_teaser_url)
-        return render(request, 'descrip.html',{'movie':movie})
+        return render(request, 'description.html',{'movie':movie})
 
     def convertLink(self, link):
         str = link
