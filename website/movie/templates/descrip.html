@@ -22,13 +22,7 @@
         <div class="row cell">
           <button class="btn btn-green" type="button" data-toggle="modal"
           data-target="#watchOnline"><span class="glyphicon glyphicon-play"></span> Watch Online</button>
-          <div id="watchOnline" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-              <video controls preload=metadata width=720 height=400 poster="Edge.jpg">
-                  <source src="{{movie.movie_file.url}}" type="video/mp4">
-              </video>
-            </div>
-          </div>
+
           <a class="btn btn-green" href="{% url 'movie:download_api' movie.id%}"><span class="glyphicon glyphicon-save"></span> Download</a>
         </div>
         {% endif %}
@@ -51,6 +45,18 @@
         <span class="movie-desc">Description : </span>
         <span>{{movie.movie_description}}</span>
       </p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block player %}
+<div id="watchOnline" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <video controls preload=metadata poster="{{movie.movie_thumbnail.url}}">
+          <source src="{{movie.movie_file.url}}" type="video/mp4">
+      </video>
     </div>
   </div>
 </div>
