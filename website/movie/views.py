@@ -168,3 +168,10 @@ class DescriptionView(View):
 def movies(request):
     movies = list(Movie.objects.values_list('movie_name', flat=True))
     return JsonResponse({'movies':movies})
+
+class PolicyView(View):
+    form_class = UserForm
+    template_name = 'privacypolicy.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
