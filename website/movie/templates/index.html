@@ -13,7 +13,7 @@
     {% endfor %}
     </div>
 
-    {%for genre, movies in genre_movies.items|dictsort:"0.lower" %}
+    {%for  genre,movies in list_movies.items %}
     <div class="app-content-row">
       <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10"><span class="topic-genre">{{genre}}</span></div>
       <form action="{% url 'movie:filter' genre|lower 'movie_name' %}" method="post">
@@ -21,7 +21,7 @@
         <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2"><button type="submit" class="btn btn-seemore ">See More</button></div>
       </form>
 
-      {% for movie in movies %}
+      {% for  movie in movies %}
           {% include "card.html" %}
       {% endfor %}
   </div>

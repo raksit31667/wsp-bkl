@@ -26,18 +26,14 @@ class IndexView(View):
         # except KeyError:
         #     pass
         # return render(request, self.template_name, {'form': form, 'all_genres': all_genres, 'all_movies': all_movies, 'invalid_login': invalid_login})
-        number_of_card_in_row = 4
-
-        genre_movies = {}
-        all_movies = Movie.objects.all()[:number_of_card_in_row]
+        list_movies = {}
+        all_movies = Movie.objects.all()[:4]
         all_genres = Genre.objects.all()
         for genre in all_genres:
-            movies_in_genre = Movie.objects.filter(genre=genre)[:number_of_card_in_row]
-            genre_movies[genre.genre_name] = movies_in_genre
-
-        return render(request, self.template_name, {'all_genres': all_genres, 'all_movies': all_movies, 'genre_movies':genre_movies})
-
-
+            movie_in_genre = Movie.objects.filter(genre=genre)[:4]
+            list_movies[genre] = movie_in_genre
+            # list_movies.append(movie_in_genre)
+        return render(request,'index.html',{'all_movies':all_movies,'all_genres':all_genres,'list_movies':list_movies})
 
 
     def post(self, request):
