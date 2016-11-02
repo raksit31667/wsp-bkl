@@ -43,14 +43,14 @@
               </div>
             </div>
 
-            <div class="checkbox">
-              <label><input type="checkbox" value="accept" id="register-policy">Accept our <a>policy</a></label>
-            </div>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="inlineCheckbox1" value="option1"> Accept our <a href="{% url 'movie:privacypolicy' %}" target="_blank">Private Policy</a>
+            </label>
           </div>
 
           <div class="modal-input-button">
             <div class="form-group">
-                <button type="submit" class="col-xs-12 btn btn-modal">Create Account</button>
+              <button type="submit" class="col-xs-12 btn btn-modal">Create Account</button>
             </div>
           </div>
         </form>
