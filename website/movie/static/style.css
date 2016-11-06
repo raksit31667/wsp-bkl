@@ -44,8 +44,12 @@ body{
 }
 .app-content .card .movie-name{
   font-size: 20px;
-  padding-left:  5px;
+  padding-left: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
 .app-content .card .movie-genre{
   font-size: 15px;
   padding-left:  5px;
