@@ -1,8 +1,11 @@
 # wsp-bkl
 
 ## Prerequisite
+- Python3
 - Django==1.10.1
 - psycopg2==2.6.2
+- postgresql v9.x
+- libpq-dev python3-dev
 
 ## Installation
 ``` sh
@@ -28,7 +31,7 @@ Example, in Use case "View the movie list" and you would like to edit the templa
 git checkout -b show_list/templates
 ```
 
-## Feature
+## Features (Cycle 1)
 push to these following branches
 
 - view-list-movies (momo)
@@ -43,6 +46,19 @@ push to these following branches
 - admin-add
 - admin-delete
 - admin-edit
+
+## Features (Cycle 2)
+push to these following branches
+
+- purchase
+- library
+- ratings
+- recommended-movies
+- refillment
+- view-members
+- search-members
+- report
+- view-report
 
 ## Specific Feature
 push to the branch ```master```
