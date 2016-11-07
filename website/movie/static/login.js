@@ -41,7 +41,10 @@ function getCookie(name) {
         data : {username: username, password: password},
         success : function(response){
           if(response.loginable == true){
-            window.location.reload()
+            $('#login-modal').modal('hide');
+            $('.modal-custom-msg').text("You have successfully logged in");
+            $('#custom-modal').modal('toggle');
+            setTimeout("window.location.reload(true)", 1000);
           }
           else{
             $("#login-error-message").text(response.msg);
