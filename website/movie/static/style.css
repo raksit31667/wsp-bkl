@@ -50,7 +50,7 @@ body{
   text-overflow: ellipsis;
 }
 
-.app-content .card .movie-genre{
+.app-content .card .movie-genre {
   font-size: 15px;
   padding-left:  5px;
 }
@@ -117,7 +117,7 @@ body{
 .app-content .desc-style{
   font-size: 25px;
 }
-.app-content .desc-style .movie-genre , .movie-year , .movie-desc{
+.app-content .desc-style .movie-genre , .movie-year , .movie-rating , .movie-desc{
   font-weight: bold;
 }
 .app-content .right-block .cell .instrinsic-container{
