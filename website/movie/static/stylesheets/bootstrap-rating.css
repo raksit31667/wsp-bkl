@@ -13,3 +13,15 @@
 .symbol-filled {
   background-color: black;
 }
+
+#review .rating-symbol {
+  color: #f0ad4e;
+}
+
+#review .glyphicon {
+  font-size: 2em;
+}
+
+#review .form-rating {
+  text-align: center;
+}
