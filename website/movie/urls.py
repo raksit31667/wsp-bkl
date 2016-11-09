@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^api/logout/$', views.logout_api, name="logout_api"),
     url(r'^api/register/$', views.register_api, name="login_api"),
     url(r'^api/download/([0-9]+)/$',views.download_api, name='download_api'),
+    url(r'^api/rating/([0-9]+)/$',views.rating_api, name='rating_api'),
     url(r'^filter/(?P<genre>[\w\-]+)/(?P<sortby>[\w\-]+)/$', views.filter, name="filter"),
     url(r'^search/$', views.search_movie, name="search"),
     url(r'^([0-9]+)/$',views.DescriptionView.as_view() , name='description'),

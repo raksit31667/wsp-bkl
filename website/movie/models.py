@@ -24,3 +24,11 @@ class Movie(models.Model):
     def __str__(self):
         if self.movie_name:
             return self.movie_name + " (%d)" % self.release_year
+
+class Rating(models.Model):
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, default=1)
+    rating = models.PositiveSmallIntegerField(default=0)
+
+    def __str__(self):
+        return "%s reviewed %s as %d" % (self.user, self.movie, self.rating)

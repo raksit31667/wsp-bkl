@@ -5,47 +5,16 @@ from django import forms
 from django.views.generic import View
 from django.utils.safestring import mark_safe
 from django.urls import reverse
-from .models import Genre, Movie
+from .models import Genre, Movie, Rating
 from .forms import UserForm
 from django.http import HttpResponse, HttpResponseRedirect
 from wsgiref.util import FileWrapper
 from django.http import JsonResponse
 import json
 
-class IndexView(View):
-    form_class = UserForm
-    template_name = 'index.html'
-
-    def get(self, request):
-        # form = self.form_class(None)
-        # all_genres = Genre.objects.all()
-        # all_movies = Movie.objects.all()
-        # invalid_login = request.session.get('invalid_login')
-        # try:
-        #     del request.session['invalid_login']
-        # except KeyError:
-        #     pass
-        # return render(request, self.template_name, {'form': form, 'all_genres': all_genres, 'all_movies': all_movies, 'invalid_login': invalid_login})
-        list_movies = {}
-        all_movies = Movie.objects.all()[:4]
-        all_genres = Genre.objects.all()
-        for genre in all_genres:
-            movie_in_genre = Movie.objects.filter(genre=genre)[:4]
-            list_movies[genre] = movie_in_genre
-            # list_movies.append(movie_in_genre)
-        return render(request,'index.html',{'all_movies':all_movies,'all_genres':all_genres,'list_movies':list_movies})
-
-
-    def post(self, request):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            password = form.cleaned_data['password']
-            user.set_password(password)
-            user.save()
-            return render(request, self.template_name, {'form': form})
-
-        return render(request, self.template_name, {'form': form, 'invalid_register': True})
+def movies(request):
+    movies = list(Movie.objects.values_list('movie_name', flat=True))
+    return JsonResponse({'movies':movies})
 
 def filter(request, genre, sortby):
     all_genres = Genre.objects.all()
@@ -152,6 +121,50 @@ def download_api(request, movie_id):
         return response
     return HttpResponse("Please Login")
 
+def rating_api(request, movie_id):
+    movie = Movie.objects.get(pk=movie_id)
+    user = request.user
+    rating_val = request.POST.get('rating', 0)
+    rating = Rating(movie=movie, user=user, rating=rating_val)
+    rating.save()
+    return HttpResponseRedirect('/movie/'+movie_id)
+
+class IndexView(View):
+    form_class = UserForm
+    template_name = 'index.html'
+
+    def get(self, request):
+        # form = self.form_class(None)
+        # all_genres = Genre.objects.all()
+        # all_movies = Movie.objects.all()
+        # invalid_login = request.session.get('invalid_login')
+        # try:
+        #     del request.session['invalid_login']
+        # except KeyError:
+        #     pass
+        # return render(request, self.template_name, {'form': form, 'all_genres': all_genres, 'all_movies': all_movies, 'invalid_login': invalid_login})
+        list_movies = {}
+        all_movies = Movie.objects.all()[:4]
+        all_genres = Genre.objects.all()
+        for genre in all_genres:
+            movie_in_genre = Movie.objects.filter(genre=genre)[:4]
+            list_movies[genre] = movie_in_genre
+            # list_movies.append(movie_in_genre)
+        return render(request,'index.html',{'all_movies':all_movies,'all_genres':all_genres,'list_movies':list_movies})
+
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            password = form.cleaned_data['password']
+            user.set_password(password)
+            user.save()
+            return render(request, self.template_name, {'form': form})
+
+        return render(request, self.template_name, {'form': form, 'invalid_register': True})
+
+
 class DescriptionView(View):
     form_class = UserForm
     template_name = 'description.html'
@@ -164,10 +177,6 @@ class DescriptionView(View):
     def convertLink(self, link):
         str = link
         return str.replace('watch?v=', 'embed/')
-
-def movies(request):
-    movies = list(Movie.objects.values_list('movie_name', flat=True))
-    return JsonResponse({'movies':movies})
 
 class PolicyView(View):
     form_class = UserForm
