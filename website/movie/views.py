@@ -155,7 +155,7 @@ class IndexView(View):
         all_movies = Movie.objects.all()[:4]
         all_genres = Genre.objects.all()
         rating_dict = {}
-        for movie in all_movies:
+        for movie in Movie.objects.all():
             rating_dict[movie.id] = Rating.objects.filter(movie=movie).aggregate(Avg('rating'))['rating__avg']
 
         for genre in all_genres:
@@ -163,7 +163,6 @@ class IndexView(View):
             list_movies[genre] = movie_in_genre
             # list_movies.append(movie_in_genre)
 
-        print(rating_dict)
         return render(request,'index.html',{'all_movies':all_movies,'all_genres':all_genres, 'list_movies':list_movies, 'rating_dict': rating_dict})
 
 
