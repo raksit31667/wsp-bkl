@@ -5,6 +5,7 @@ from django import forms
 from django.views.generic import View
 from django.utils.safestring import mark_safe
 from django.urls import reverse
+from django.db.models import Avg
 from .models import Genre, Movie, Rating
 from .forms import UserForm
 from django.http import HttpResponse, HttpResponseRedirect
@@ -146,11 +147,12 @@ class IndexView(View):
         list_movies = {}
         all_movies = Movie.objects.all()[:4]
         all_genres = Genre.objects.all()
+        all_ratings = Rating.objects.all()
         for genre in all_genres:
             movie_in_genre = Movie.objects.filter(genre=genre)[:4]
             list_movies[genre] = movie_in_genre
             # list_movies.append(movie_in_genre)
-        return render(request,'index.html',{'all_movies':all_movies,'all_genres':all_genres,'list_movies':list_movies})
+        return render(request,'index.html',{'all_movies':all_movies,'all_genres':all_genres, 'all_ratings': all_ratings, 'list_movies':list_movies})
 
 
     def post(self, request):
@@ -171,8 +173,9 @@ class DescriptionView(View):
 
     def get(self, request, movie_id):
         movie = Movie.objects.get(id=movie_id)
+        rating = Rating.objects.filter(movie=movie).aggregate(Avg('rating'))['rating__avg']
         movie.movie_teaser_url = self.convertLink(movie.movie_teaser_url)
-        return render(request, 'description.html',{'movie':movie})
+        return render(request, 'description.html',{ 'movie':movie, 'rating': rating })
 
     def convertLink(self, link):
         str = link
