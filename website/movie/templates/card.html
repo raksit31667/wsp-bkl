@@ -3,6 +3,12 @@
       <a href="/movie/{{movie.id}}/"><img src="{{movie.movie_thumbnail.url}}" alt="image" class="img-poster"></a>
       <p class="movie-name">{{movie.movie_name}} ({{movie.release_year}})</p>
       <p class="movie-genre">{{movie.genre}}</p>
-      <input type="hidden" class="rating" data-readonly value="0"/>
+      {% if rating_dict %}
+        {% for key, value in rating_dict.items %}
+          {% if key == movie.id %}
+            <input type="hidden" class="rating" data-readonly value="{{value}}"/>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
     </div>
 </div>
