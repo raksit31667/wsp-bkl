@@ -13,7 +13,7 @@
     {% endfor %}
     </div>
 
-    {%for  genre,movies in list_movies.items %}
+    {%for genre, movies in list_movies.items %}
     <div class="app-content-row">
       <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10"><span class="topic-genre">{{genre}}</span></div>
       <form action="{% url 'movie:filter' genre|lower 'movie_name' %}" method="post">

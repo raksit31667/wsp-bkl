@@ -126,7 +126,14 @@ def rating_api(request, movie_id):
     movie = Movie.objects.get(pk=movie_id)
     user = request.user
     rating_val = request.POST.get('rating', 0)
-    rating = Rating(movie=movie, user=user, rating=rating_val)
+
+    if Rating.objects.filter(movie=movie, user=user).exists():
+        rating = Rating.objects.get(movie=movie, user=user)
+        rating.rating = rating_val
+
+    else:
+        rating = Rating(movie=movie, user=user, rating=rating_val)
+
     rating.save()
     return HttpResponseRedirect('/movie/'+movie_id)
 
