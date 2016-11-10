@@ -142,28 +142,17 @@ class IndexView(View):
     template_name = 'index.html'
 
     def get(self, request):
-        # form = self.form_class(None)
-        # all_genres = Genre.objects.all()
-        # all_movies = Movie.objects.all()
-        # invalid_login = request.session.get('invalid_login')
-        # try:
-        #     del request.session['invalid_login']
-        # except KeyError:
-        #     pass
-        # return render(request, self.template_name, {'form': form, 'all_genres': all_genres, 'all_movies': all_movies, 'invalid_login': invalid_login})
         list_movies = {}
         all_movies = Movie.objects.all()[:4]
         all_genres = Genre.objects.all()
         rating_dict = {}
-        for movie in Movie.objects.all():
-            rating_dict[movie.id] = Rating.objects.filter(movie=movie).aggregate(Avg('rating'))['rating__avg']
 
         for genre in all_genres:
             movie_in_genre = Movie.objects.filter(genre=genre)[:4]
             list_movies[genre] = movie_in_genre
             # list_movies.append(movie_in_genre)
 
-        return render(request,'index.html',{'all_movies':all_movies,'all_genres':all_genres, 'list_movies':list_movies, 'rating_dict': rating_dict})
+        return render(request,'index.html',{'all_movies':all_movies,'all_genres':all_genres, 'list_movies':list_movies})
 
 
     def post(self, request):
