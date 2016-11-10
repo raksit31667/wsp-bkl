@@ -50,15 +50,12 @@ push to these following branches
 ## Features (Cycle 2)
 push to these following branches
 
-- purchase
-- library
-- ratings
+- refillment (boss)
+- purchase (peak)
+- reception (tan)
+- ratings (earth)
+- library (momo)
 - recommended-movies
-- refillment
-- view-members
-- search-members
-- report
-- view-report
 
 ## Specific Feature
 push to the branch ```master```
