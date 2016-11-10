@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Avg
 from django.contrib.auth.models import User
 # Create your models here.
 
@@ -24,6 +25,9 @@ class Movie(models.Model):
     def __str__(self):
         if self.movie_name:
             return self.movie_name + " (%d)" % self.release_year
+
+    def get_avg_rating(self):
+        return Rating.objects.filter(movie=self).aggregate(Avg('rating'))['rating__avg']
 
 class Rating(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
