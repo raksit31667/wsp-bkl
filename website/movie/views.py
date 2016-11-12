@@ -5,7 +5,7 @@ from django import forms
 from django.views.generic import View
 from django.utils.safestring import mark_safe
 from django.urls import reverse
-from django.db.models import Avg
+from django.db.models import Avg, Count
 from .models import Genre, Movie, Rating
 from .forms import UserForm
 from django.http import HttpResponse, HttpResponseRedirect
@@ -22,12 +22,18 @@ def filter(request, genre, sortby):
 
     if sortby:
         if genre == 'all':
-            selected_movies = Movie.objects.order_by(sortby)
+            if sortby == 'rating':
+                selected_movies = Movie.objects.annotate(avg_rating=Avg('rating__rating')).exclude(avg_rating__isnull=True).order_by('-avg_rating')
+            else:
+                selected_movies = Movie.objects.order_by(sortby)
             selected_genre = None
 
         else:
             genre_id = Genre.objects.get(genre_name__iexact=genre).id
-            selected_movies = Movie.objects.filter(genre_id=genre_id).order_by(sortby)
+            if sortby == 'rating':
+                selected_movies = Movie.objects.annotate(avg_rating=Avg('rating__rating')).exclude(avg_rating__isnull=True).filter(genre_id=genre_id).order_by('-avg_rating')
+            else:
+                selected_movies = Movie.objects.filter(genre_id=genre_id).order_by(sortby)
             selected_genre = Genre.objects.get(pk=genre_id)
 
     else:

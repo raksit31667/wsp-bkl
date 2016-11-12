@@ -24,9 +24,11 @@
           {% if selected_genre %}
           <li><a href="{% url 'movie:filter' selected_genre.genre_name|lower 'movie_name' %}" onclick="form.submit();">A-Z</a></li>
           <li><a href="{% url 'movie:filter' selected_genre.genre_name|lower 'release_year' %}" onclick="form.submit();">Release Year</a></li>
+          <li><a href="{% url 'movie:filter' selected_genre.genre_name|lower 'rating' %}" onclick="form.submit();">Top Rated</a></li>
           {% else %}
           <li><a href="{% url 'movie:filter' 'all' 'movie_name' %}" onclick="form.submit();">A-Z</a></li>
           <li><a href="{% url 'movie:filter' 'all' 'release_year' %}" onclick="form.submit();">Release Year</a></li>
+          <li><a href="{% url 'movie:filter' 'all' 'rating' %}" onclick="form.submit();">Top Rated</a></li>
           {% endif %}
         </ul>
       </div>
