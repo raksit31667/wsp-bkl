@@ -1,2 +1,7 @@
-Django==1.10.1
-psycopg2==2.6.2
+adium-theme-ubuntu==0.3.4
+djangorestframework==3.4.7
+gyp==0.1
+psycopg2==2.6.1
+pycurl==7.43.0
+python-apt==1.1.0b1
+unity-lens-photos==1.0
