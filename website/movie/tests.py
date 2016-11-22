@@ -11,6 +11,7 @@ import time
 class BKLTestCase(TestCase):
     def setUp(self):
         test_user = User.objects.create_user('bkl', 'bkl@ku.ac.th', 'password')
+        test_user2 = User.objects.create_user('bkl2', 'bkl2@ku.ac.th', 'password')
         test_genre = Genre.objects.create(genre_name="Test Genre", genre_description="This is the test genre.")
         test_movie = Movie.objects.create(genre=test_genre, movie_name="Test Movie", movie_description="This is the test movie.",
         release_year=1970, movie_price=150, movie_teaser_url="https://bkltestcase.ku.ac.th",
@@ -29,6 +30,14 @@ class BKLTestCase(TestCase):
         movies = Movie.objects.filter(movie_name__icontains='t')
         for movie in movies:
             self.assertEqual(movie.__str__(), "Test Movie (1970)")
+
+    def test_rating(self):
+        test_user = User.objects.get(username="bkl")
+        test_user2 = User.objects.get(username="bkl2")
+        movie = Movie.objects.get(movie_name="Test Movie")
+        rating_from_user = Rating.objects.create(movie=movie, user=test_user, rating=2)
+        rating_from_user2 = Rating.objects.create(movie=movie, user=test_user2, rating=3)
+        self.assertEqual(movie.get_avg_rating(), 2.5)
 
 class BKLLiveTestCase(LiveServerTestCase):
 
