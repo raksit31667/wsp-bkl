@@ -1,11 +1,27 @@
-from django.test import TestCase, LiveServerTestCase
+from django.test import TestCase, LiveServerTestCase, Client
+from django.core.files import File
+from django.contrib.auth.models import User
+from .models import Genre, Movie, Rating
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
 
 # Create your tests here.
 
-class BKLTestCase(LiveServerTestCase):
+class BKLTestCase(TestCase):
+    def setUp(self):
+        test_user = User.objects.create_user('bkl', 'bkl@ku.ac.th', 'password')
+        test_genre = Genre.objects.create(genre_name="Test Genre", genre_description="This is the test genre.")
+        test_movie = Movie.objects.create(genre=test_genre, movie_name="Test Movie", movie_description="This is the test movie.",
+        release_year=1970, movie_price=150, movie_teaser_url="https://bkltestcase.ku.ac.th",
+        movie_thumbnail="media/test/test.jpg", movie_file="media/test/test.mp4",
+        user=test_user)
+
+    def test_add_movie(self):
+        movies = Movie.objects.all()
+        self.assertEqual(len(movies), 1)
+
+class BKLLiveTestCase(LiveServerTestCase):
 
     # setUp is where you setup call fixture creation scripts
     # and instantiate the WebDriver, which in turns loads up the browser.
