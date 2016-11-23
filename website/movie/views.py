@@ -193,3 +193,10 @@ class PolicyView(View):
 
     def get(self, request):
         return render(request, self.template_name)
+
+class RefillmentView(View):
+    form_class = UserForm
+    template_name = 'refillment.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
