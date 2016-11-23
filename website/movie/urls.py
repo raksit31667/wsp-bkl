@@ -14,4 +14,5 @@ urlpatterns = [
     url(r'^([0-9]+)/$',views.DescriptionView.as_view() , name='description'),
     url(r'^movies/$',views.movies , name='movies'),
     url(r'^privacypolicy/$',views.PolicyView.as_view() , name='privacypolicy'),
+    url(r'^refillment/$',views.RefillmentView.as_view() , name='refillment'),
 ]
