@@ -15,7 +15,7 @@ class BKLTestCase(TestCase):
         test_genre = Genre.objects.create(genre_name="Test Genre", genre_description="This is the test genre.")
         test_movie = Movie.objects.create(genre=test_genre, movie_name="Test Movie", movie_description="This is the test movie.",
         release_year=1970, movie_price=150, movie_teaser_url="https://bkltestcase.ku.ac.th",
-        movie_thumbnail="media/test/test.jpg", movie_file="media/test/test.mp4",
+        movie_thumbnail="test.jpg", movie_file="test.mp4",
         user=test_user)
 
     def test_add_movie(self):
@@ -61,15 +61,28 @@ class BKLLiveTestCase(LiveServerTestCase):
         login_nav.click()
         username = selenium.find_element_by_id('login-username')
         password = selenium.find_element_by_id('login-password')
+        error_message = selenium.find_element_by_id('login-error-message')
         submit = selenium.find_element_by_xpath("//*[contains(text(), 'Sign in')]")
 
         # need to wait until login modal is visible
         time.sleep(2)
 
         username.send_keys('admin')
-        password.send_keys('incorrect')
-
+        password.send_keys('correct')
         submit.click()
+
+        # need to wait login process
+        time.sleep(1)
+
+        self.assertEqual(error_message.text, "Invalid username or password.")
+
+        username.clear()
+        password.clear()
+
+        username.send_keys('admin')
+        password.send_keys('incorrect')
+        submit.click()
+
         # TODO: assert the satisfied result
 
     def test_register(self):
@@ -94,6 +107,10 @@ class BKLLiveTestCase(LiveServerTestCase):
         confirm_password.send_keys('drowssap')
         check_policy.click()
         submit.click()
+
+        # need to wait register process
+        time.sleep(1)
+
         self.assertEqual(error_message.text, "Passwords are not the same")
 
         username.clear()
@@ -108,6 +125,10 @@ class BKLLiveTestCase(LiveServerTestCase):
         confirm_password.send_keys('password')
         check_policy.click()
         submit.click()
+
+        # need to wait register process
+        time.sleep(1)
+
         self.assertEqual(error_message.text, "Please input all the of fields")
 
         username.clear()
@@ -122,4 +143,8 @@ class BKLLiveTestCase(LiveServerTestCase):
         confirm_password.send_keys('password')
         # check_policy.click()
         submit.click()
+
+        # need to wait register process
+        time.sleep(1)
+        
         self.assertEqual(error_message.text, "Please accept our policy")
