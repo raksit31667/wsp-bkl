@@ -1,11 +1,15 @@
 {% extends 'base.html' %}
-{% block title %} BKL Movie Streaming Service {% endblock %}
+{% block title %} Refillment System {% endblock %}
 {% block content %}
-<div class="col-xs-4">
-    <label for="ex3">Serial Code:</label>
-    <input class="form-control" id="serial_code" type="text">
-    <div class="col-md-6 col-xs-12">
-        <button type="submit" class="col-xs-12 btn btn-modal">Confirm</button>
+  {% if user.is_superuser %}
+    {{user}}
+  {% else %}
+    <div class="col-xs-4">
+        <label for="ex3">Serial Code:</label>
+        <input class="form-control" id="serial_code" type="text">
+        <div class="col-md-6 col-xs-12">
+            <button type="submit" class="col-xs-12 btn btn-modal">Confirm</button>
+        </div>
     </div>
-</div>
+  {% endif %}
 {% endblock %}
