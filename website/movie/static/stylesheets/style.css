@@ -139,3 +139,7 @@ video {
   height: auto;
   background:transparent url('{{movie.movie_thumbnail.url}}');
 }
+
+.form-refillment > .form-group {
+  margin-bottom: 50px;
+}
