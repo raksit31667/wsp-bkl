@@ -52,7 +52,7 @@ push to these following branches
 
 - refillment (boss)
 - purchase (peak)
-- reception (tan)
+- receipt (tan)
 - ratings (earth)
 - library (momo)
 - recommended-movies
@@ -61,3 +61,6 @@ push to these following branches
 push to the branch ```master```
 - default css
 - default templates
+
+## References
+https://trello.com/b/v9Gvni63/bkl-movie-streaming-service
