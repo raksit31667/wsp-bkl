@@ -6,11 +6,12 @@ from django.views.generic import View
 from django.utils.safestring import mark_safe
 from django.urls import reverse
 from django.db.models import Avg, Count
-from .models import Genre, Movie, Rating
+from .models import Genre, Movie, Rating, Serial
 from .forms import UserForm
 from django.http import HttpResponse, HttpResponseRedirect
 from wsgiref.util import FileWrapper
 from django.http import JsonResponse
+from random import randint
 import json
 
 def movies(request):
@@ -145,6 +146,35 @@ def rating_api(request, movie_id):
     rating.save()
     return HttpResponseRedirect('/movie/'+movie_id)
 
+
+def does_serial_exist(code):
+    for serial in Serial.objects.all():
+        if (code == serial.serial_code):
+            return True
+    return False
+
+
+def generate_code():
+    serial = ''
+    while True:
+        for num in range(15):
+            number = randint(1, 36)
+            if (number <= 26):
+                serial += chr(number + 96)
+            else:
+                serial += str(number - 27)
+        if not does_serial_exist(serial):
+            break
+    return serial
+
+def refillment_api(request):
+    if(request.POST):
+        price = int(request.POST['price'])
+        amount = int(request.POST['amount'])
+        for i in range(0, amount):
+            code = generate_code()
+            serial = Serial.objects.create(serial_code=code, price=price)
+    return render(request, 'refillment.html');
 class IndexView(View):
     form_class = UserForm
     template_name = 'index.html'
@@ -202,3 +232,6 @@ class RefillmentView(View):
 
     def get(self, request):
         return render(request, self.template_name)
+
+
+
