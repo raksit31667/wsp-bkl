@@ -6,7 +6,7 @@ from django.views.generic import View
 from django.utils.safestring import mark_safe
 from django.urls import reverse
 from django.db.models import Avg, Count
-from .models import Genre, Movie, Rating, Serial
+from .models import Genre, Movie, Rating, Serial, Transaction, UserNet
 from .forms import UserForm
 from django.http import HttpResponse, HttpResponseRedirect
 from wsgiref.util import FileWrapper
@@ -168,13 +168,36 @@ def generate_code():
     return serial
 
 def refillment_api(request):
-    if(request.POST):
-        price = int(request.POST['price'])
-        amount = int(request.POST['amount'])
-        for i in range(0, amount):
-            code = generate_code()
-            serial = Serial.objects.create(serial_code=code, price=price)
-    return render(request, 'refillment.html');
+    user = request.user
+    if user.is_superuser:
+        if(request.POST):
+            price = int(request.POST['price'])
+            amount = int(request.POST['amount'])
+            for i in range(0, amount):
+                code = generate_code()
+                serial = Serial.objects.create(serial_code=code, price=price)
+        return render(request, 'refillment.html')
+    else:
+        if (request.POST):
+            code = request.POST['serial']
+            price = 0
+            if(does_serial_exist(code)):
+                price = Serial.objects.get(serial_code = code).price
+
+            else:
+                message = "This serial code does not exist."
+                return render(request, 'refillment.html', {'error_msg': message})
+
+            user_net = None
+            if not Transaction.objects.filter(user = user).exists():
+                user_net = UserNet.objects.create(user = user, net=0)
+            else:
+                user_net = UserNet.objects.get(user = user)
+            Transaction.objects.create(user = user, price = price, net = user_net.net + price)
+            user_net.net = user_net.net + price
+            user_net.save()
+
+        return render(request, 'refillment.html')
 class IndexView(View):
     form_class = UserForm
     template_name = 'index.html'

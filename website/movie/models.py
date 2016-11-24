@@ -43,3 +43,22 @@ class Serial(models.Model):
 
     def __str__(self):
        return self.serial_code
+
+class Transaction(models.Model):
+    user = models.ForeignKey(User, default=1)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    price = models.SmallIntegerField(default=0)
+    net = models.PositiveSmallIntegerField(default=0)
+
+    def __str__(self):
+        if(self.price > 0):
+            return "%s refilled %d.(%s)" % (self.user, self.price, self.timestamp)
+        else:
+            return self.user
+
+class UserNet(models.Model):
+    user = models.ForeignKey(User, default=1)
+    net = models.PositiveSmallIntegerField(default=0)
+
+    def __str__(self):
+        return "%s has %d." % (self.user, self.net)
