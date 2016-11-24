@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% block title %} Refillment System {% endblock %}
 {% block content %}
+    {% if error_msg %}
+        <span class="text-danger small" id="error-message">{{ error_msg }}</span>
+    {% endif %}
   {% if user.is_superuser %}
   <form class="form-refillment" action="{% url 'movie:refillment' %}" method="post">
   {% csrf_token %}
@@ -26,11 +29,12 @@
   </form>
   
   {% else %}
-  <form class="form-refillment" action="" method="post">
+  <form class="form-refillment" action="{% url 'movie:refillment' %}" method="post">
+  {% csrf_token %}
     <div class="form-group">
         <label for="serial-code" class="col-sm-12 col-md-2">Serial Number: </label>
         <div class="col-xs-12 col-md-6">
-          <input class="form-control" id="serial-code" type="text">
+          <input class="form-control" name="serial" id="serial-code" type="text">
         </div>
     </div>
 
