@@ -132,6 +132,8 @@ def rating_api(request, movie_id):
     movie = Movie.objects.get(pk=movie_id)
     user = request.user
     rating_val = request.POST.get('rating', 0)
+    if rating_val == '':
+        rating_val = 0
 
     if Rating.objects.filter(movie=movie, user=user).exists():
         rating = Rating.objects.get(movie=movie, user=user)
