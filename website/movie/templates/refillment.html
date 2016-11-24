@@ -2,18 +2,19 @@
 {% block title %} Refillment System {% endblock %}
 {% block content %}
   {% if user.is_superuser %}
-  <form class="form-refillment" action="" method="post">
+  <form class="form-refillment" action="{% url 'movie:refillment' %}" method="post">
+  {% csrf_token %}
     <div class="form-group row">
         <label for="serial-price" class="col-sm-12 col-md-2">Price: </label>
         <div class="col-xs-12 col-md-6">
-          <input class="form-control" id="serial-price" type="number">
+          <input class="form-control" id="serial-price" name="price" placeholder="price" type="number">
         </div>
     </div>
 
     <div class="form-group row">
         <label for="serial-amount" class="col-sm-12 col-md-2">Amount: </label>
         <div class="col-xs-12 col-md-6">
-          <input class="form-control" id="serial-amount" type="number">
+          <input class="form-control" id="serial-amount" name="amount" placeholder="amount" type="number">
         </div>
     </div>
 

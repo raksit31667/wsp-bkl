@@ -37,6 +37,9 @@ class Rating(models.Model):
     def __str__(self):
         return "%s reviewed %s as %d" % (self.user, self.movie, self.rating)
 
-class Refillment(models.Model):
+class Serial(models.Model):
     serial_code = models.CharField(max_length=15)
-    value = models.SmallIntegerField(default=0)
+    price = models.SmallIntegerField(default=0)
+
+    def __str__(self):
+       return self.serial_code
