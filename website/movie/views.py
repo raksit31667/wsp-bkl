@@ -181,8 +181,16 @@ def refillment_api(request):
         if (request.POST):
             code = request.POST['serial']
             price = 0
-            if(does_serial_exist(code)):
-                price = Serial.objects.get(serial_code = code).price
+
+            if does_serial_exist(code):
+                serial_obj = Serial.objects.get(serial_code = code)
+                if serial_obj.is_active:
+                    price = serial_obj.price
+                    serial_obj.is_active = False
+                    serial_obj.save()
+                else:
+                    message = "This serial is not active or already been used."
+                    return render(request, 'refillment.html', {'error_msg': message})
 
             else:
                 message = "This serial code does not exist."
@@ -248,13 +256,3 @@ class PolicyView(View):
 
     def get(self, request):
         return render(request, self.template_name)
-
-class RefillmentView(View):
-    form_class = UserForm
-    template_name = 'refillment.html'
-
-    def get(self, request):
-        return render(request, self.template_name)
-
-
-

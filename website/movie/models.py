@@ -40,6 +40,7 @@ class Rating(models.Model):
 class Serial(models.Model):
     serial_code = models.CharField(max_length=15)
     price = models.SmallIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
        return self.serial_code
