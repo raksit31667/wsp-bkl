@@ -12,9 +12,10 @@ import time
 # Create your tests here.
 
 class BKLTestCase(TestCase):
+
     def setUp(self):
         self.factory = RequestFactory()
-        
+
         self.test_admin = User.objects.create_superuser('admin', 'admin@bkl.ku.ac.th', 'incorrect')
 
         self.test_user1 = User.objects.create_user('bkl', 'bkl@bkl.ku.ac.th', 'password')
@@ -35,7 +36,7 @@ class BKLTestCase(TestCase):
 
     def test_add_movie(self):
         movies = Movie.objects.all()
-        self.assertEqual(len(movies), 1)
+        self.assertEqual(len(movies), 2)
 
     def test_description(self):
         movie = self.test_movie1
@@ -51,9 +52,9 @@ class BKLTestCase(TestCase):
         request.POST._mutable = mutable
 
         response = search_movie(request)
-        expected = Movie.objects.filter(movie_name__icontains='01')
+        expected = Movie.objects.filter(movie_name__icontains='Test Movie 01')
         result = response.context_data['result']
-        self.assertEqual(len(expected), len(result ))
+        self.assertEqual(len(expected), len(result))
 
     def test_rating(self):
         movie = self.test_movie1
@@ -67,7 +68,7 @@ class BKLTestCase(TestCase):
         genre = "Test Genre 01"
         sortby = "movie_name"
         response = filter(request, genre, sortby)
-        expected = Movie.objects.filter(genre_id=1)
+        expected = Movie.objects.filter(genre=self.test_genre1)
         result  = response.context_data['selected_movies']
         self.assertEqual(len(expected), len(result))
 
