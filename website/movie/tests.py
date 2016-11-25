@@ -1,29 +1,40 @@
-from django.test import TestCase, LiveServerTestCase, Client
+from django.test import TestCase, LiveServerTestCase, RequestFactory, Client
 from django.core.files import File
 from django.contrib.auth.models import User
-from .models import Genre, Movie, Rating
+from django.core.urlresolvers import reverse
+from .models import Genre, Movie, Rating, Serial
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+
+from .views import filter
 import time
 
 # Create your tests here.
 
 class BKLTestCase(TestCase):
     def setUp(self):
-        test_user = User.objects.create_user('bkl', 'bkl@ku.ac.th', 'password')
-        test_user2 = User.objects.create_user('bkl2', 'bkl2@ku.ac.th', 'password')
-        test_genre = Genre.objects.create(genre_name="Test Genre", genre_description="This is the test genre.")
-        test_movie = Movie.objects.create(genre=test_genre, movie_name="Test Movie", movie_description="This is the test movie.",
+        self.factory = RequestFactory()
+        self.test_admin = User.objects.create_superuser('admin', 'admin@bkl.ku.ac.th', 'incorrect')
+        self.test_user = User.objects.create_user('bkl', 'bkl@bkl.ku.ac.th', 'password')
+        self.test_user2 = User.objects.create_user('bkl2', 'bkl2@bkl.ku.ac.th', 'password')
+        self.test_genre1 = Genre.objects.create(genre_name="Test Genre 01", genre_description="This is the test genre.")
+        self.test_genre2 = Genre.objects.create(genre_name="Test Genre 02", genre_description="This is the test genre.")
+        self.test_movie1 = Movie.objects.create(genre=self.test_genre1, movie_name="Test Movie 01", movie_description="This is the test movie.",
         release_year=1970, movie_price=150, movie_teaser_url="https://bkltestcase.ku.ac.th",
         movie_thumbnail="test.jpg", movie_file="test.mp4",
-        user=test_user)
+        user=self.test_admin)
+
+        self.test_movie2 = Movie.objects.create(genre=self.test_genre2, movie_name="Test Movie 02", movie_description="This is the test movie.",
+        release_year=2016, movie_price=50, movie_teaser_url="https://bkltestcase.ku.ac.th",
+        movie_thumbnail="test.jpg", movie_file="test.mp4",
+        user=self.test_admin)
 
     def test_add_movie(self):
         movies = Movie.objects.all()
         self.assertEqual(len(movies), 1)
 
     def test_description(self):
-        movie = Movie.objects.get(movie_name="Test Movie")
+        movie = self.test_movie
         self.assertEqual(movie.movie_description, "This is the test movie.")
 
     def test_search(self):
@@ -32,12 +43,20 @@ class BKLTestCase(TestCase):
             self.assertEqual(movie.__str__(), "Test Movie (1970)")
 
     def test_rating(self):
-        test_user = User.objects.get(username="bkl")
-        test_user2 = User.objects.get(username="bkl2")
         movie = Movie.objects.get(movie_name="Test Movie")
-        rating_from_user = Rating.objects.create(movie=movie, user=test_user, rating=2)
-        rating_from_user2 = Rating.objects.create(movie=movie, user=test_user2, rating=3)
+        rating_from_user = Rating.objects.create(movie=movie, user=self.test_user, rating=2)
+        rating_from_user2 = Rating.objects.create(movie=movie, user=self.test_user2, rating=3)
         self.assertEqual(movie.get_avg_rating(), 2.5)
+
+    def test_filter(self):
+        request = self.factory.get('/')
+        request.user = self.test_admin
+        genre = "Test Genre 01"
+        sortby = "movie_name"
+        response = filter(request, genre, sortby)
+        expected_movies = Movie.objects.filter(genre_id=1)
+        selected_movies = response.context_data['selected_movies']
+        self.assertEqual(len(expected_movies), len(selected_movies))
 
 class BKLLiveTestCase(LiveServerTestCase):
 
@@ -146,5 +165,5 @@ class BKLLiveTestCase(LiveServerTestCase):
 
         # need to wait register process
         time.sleep(1)
-        
+
         self.assertEqual(error_message.text, "Please accept our policy")

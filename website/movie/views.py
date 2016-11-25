@@ -10,6 +10,7 @@ from .models import Genre, Movie, Rating, Serial, Transaction, UserNet
 from .forms import UserForm
 from django.http import HttpResponse, HttpResponseRedirect
 from wsgiref.util import FileWrapper
+from django.template.response import TemplateResponse
 from django.http import JsonResponse
 from random import randint
 import json
@@ -48,7 +49,7 @@ def filter(request, genre, sortby):
             selected_genre = Genre.objects.get(pk=genre_id)
 
 
-    return render(request, 'filter.html', {'all_genres': all_genres, 'selected_movies': selected_movies, 'selected_genre': selected_genre, 'selected_sortby': sortby})
+    return TemplateResponse(request, 'filter.html', {'all_genres': all_genres, 'selected_movies': selected_movies, 'selected_genre': selected_genre, 'selected_sortby': sortby})
 
 def search_movie(request):
     input = request.POST['typeahead']
