@@ -6,19 +6,24 @@ from .models import Genre, Movie, Rating, Serial
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
-from .views import filter
+from .views import filter, search_movie
 import time
 
 # Create your tests here.
 
 class BKLTestCase(TestCase):
+
     def setUp(self):
         self.factory = RequestFactory()
+
         self.test_admin = User.objects.create_superuser('admin', 'admin@bkl.ku.ac.th', 'incorrect')
-        self.test_user = User.objects.create_user('bkl', 'bkl@bkl.ku.ac.th', 'password')
+
+        self.test_user1 = User.objects.create_user('bkl', 'bkl@bkl.ku.ac.th', 'password')
         self.test_user2 = User.objects.create_user('bkl2', 'bkl2@bkl.ku.ac.th', 'password')
+
         self.test_genre1 = Genre.objects.create(genre_name="Test Genre 01", genre_description="This is the test genre.")
         self.test_genre2 = Genre.objects.create(genre_name="Test Genre 02", genre_description="This is the test genre.")
+
         self.test_movie1 = Movie.objects.create(genre=self.test_genre1, movie_name="Test Movie 01", movie_description="This is the test movie.",
         release_year=1970, movie_price=150, movie_teaser_url="https://bkltestcase.ku.ac.th",
         movie_thumbnail="test.jpg", movie_file="test.mp4",
@@ -31,20 +36,29 @@ class BKLTestCase(TestCase):
 
     def test_add_movie(self):
         movies = Movie.objects.all()
-        self.assertEqual(len(movies), 1)
+        self.assertEqual(len(movies), 2)
 
     def test_description(self):
-        movie = self.test_movie
+        movie = self.test_movie1
         self.assertEqual(movie.movie_description, "This is the test movie.")
 
     def test_search(self):
-        movies = Movie.objects.filter(movie_name__icontains='t')
-        for movie in movies:
-            self.assertEqual(movie.__str__(), "Test Movie (1970)")
+        request = self.factory.get('/')
+        request.user = self.test_user1
+
+        mutable = request.POST._mutable
+        request.POST._mutable = True
+        request.POST['typeahead'] = '01'
+        request.POST._mutable = mutable
+
+        response = search_movie(request)
+        expected = Movie.objects.filter(movie_name__icontains='Test Movie 01')
+        result = response.context_data['result']
+        self.assertEqual(len(expected), len(result))
 
     def test_rating(self):
-        movie = Movie.objects.get(movie_name="Test Movie")
-        rating_from_user = Rating.objects.create(movie=movie, user=self.test_user, rating=2)
+        movie = self.test_movie1
+        rating_from_user = Rating.objects.create(movie=movie, user=self.test_user1, rating=2)
         rating_from_user2 = Rating.objects.create(movie=movie, user=self.test_user2, rating=3)
         self.assertEqual(movie.get_avg_rating(), 2.5)
 
@@ -54,9 +68,9 @@ class BKLTestCase(TestCase):
         genre = "Test Genre 01"
         sortby = "movie_name"
         response = filter(request, genre, sortby)
-        expected_movies = Movie.objects.filter(genre_id=1)
-        selected_movies = response.context_data['selected_movies']
-        self.assertEqual(len(expected_movies), len(selected_movies))
+        expected = Movie.objects.filter(genre=self.test_genre1)
+        result  = response.context_data['selected_movies']
+        self.assertEqual(len(expected), len(result))
 
 class BKLLiveTestCase(LiveServerTestCase):
 

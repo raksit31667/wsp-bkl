@@ -57,7 +57,7 @@ def search_movie(request):
         result = None
     else:
         result = Movie.objects.filter(movie_name__icontains=input)
-    return render(request, 'search.html', {'result':result}, {'input':input})
+    return TemplateResponse(request, 'search.html', {'result':result}, {'input':input})
 
 
 def does_username_exist(username):
