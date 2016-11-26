@@ -214,6 +214,11 @@ def refillment_api(request):
             return TemplateResponse(request, 'refillment.html', {'success_customer_msg': message})
 
         return TemplateResponse(request, 'refillment.html')
+
+def transaction_api(request):
+    records = Transaction.objects.filter(user=request.user)
+    return TemplateResponse(request, 'transaction.html', {'records': records})
+
 class IndexView(View):
     form_class = UserForm
     template_name = 'index.html'
