@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %} Transaction {% endblock %}
+{% block content %}
+<div class="table-responsive">
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Date</th>
+      <th>Income</th>
+      <th>Expense</th>
+      <th>Net</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for record in records %}
+    <tr>
+      <td>{{record.pk}}</td>
+      <td>{{record.timestamp}}</td>
+      {% if record.price >= 0 %}
+      <td>{{record.price}}</td>
+      <td></td>
+      {% else %}
+      <td></td>
+      <td>{{record.price}}</td>
+      {% endif %}
+      <td>{{record.net}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+</div>
+{% endblock %}
