@@ -7,7 +7,7 @@ from .models import Genre, Movie, Rating, Serial
 
 import json
 
-from .views import filter, search_movie, login_api, register_api
+from .views import filter, search_movie, login_api, refillment_api
 
 # Create your tests here.
 
@@ -102,3 +102,33 @@ class BKLTestCase(TestCase):
         expected = 'success'
         result = json.loads(response.content.decode('utf-8'))
         self.assertEqual(expected, result['msg'])
+
+    def test_refillment(self):
+        request = self.factory.get('/')
+        num_serials_before = 0
+        request.user = self.test_admin
+
+        mutable = request.POST._mutable
+        request.POST._mutable = True
+        request.POST['price'] = ''
+        request.POST['amount'] = ''
+        request.POST._mutable = mutable
+
+        response = refillment_api(request)
+        expected = 'Please complete all information requested on this form.'
+        result = response.context_data['error_msg']
+        self.assertEqual(expected, result)
+
+        mutable = request.POST._mutable
+        request.POST._mutable = True
+        request.POST['price'] = '100'
+        request.POST['amount'] = '5'
+        request.POST._mutable = mutable
+
+        response = refillment_api(request)
+        num_serials_after = len(Serial.objects.all())
+
+        expected = 'Success! You have generated 100 baht for 5 serials.'
+        result = response.context_data['success_msg']
+        self.assertEqual(num_serials_before + 5, num_serials_after)
+        self.assertEqual(expected, result)

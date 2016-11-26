@@ -173,15 +173,15 @@ def refillment_api(request):
     if user.is_superuser:
         if(request.POST):
             if request.POST['price'] == '' or request.POST['amount'] == '':
-                return render(request, 'refillment.html', {'error_msg': 'Please complete all information requested on this form.'})
+                return TemplateResponse(request, 'refillment.html', {'error_msg': 'Please complete all information requested on this form.'})
 
             price = int(request.POST['price'])
             amount = int(request.POST['amount'])
             for i in range(0, amount):
                 code = generate_code()
                 serial = Serial.objects.create(serial_code=code, price=price)
-            return render(request, 'refillment.html', {'success_msg': 'Success! You have generated %d baht for %d serials.' % (price, amount)})
-        return render(request, 'refillment.html')
+            return TemplateResponse(request, 'refillment.html', {'success_msg': 'Success! You have generated %d baht for %d serials.' % (price, amount)})
+        return TemplateResponse(request, 'refillment.html')
     else:
         if (request.POST):
             code = request.POST['serial']
@@ -195,11 +195,11 @@ def refillment_api(request):
                     serial_obj.save()
                 else:
                     message = "This serial code is not active or already in use."
-                    return render(request, 'refillment.html', {'error_msg': message})
+                    return TemplateResponse(request, 'refillment.html', {'error_msg': message})
 
             else:
                 message = "Invalid serial code, please try again"
-                return render(request, 'refillment.html', {'error_msg': message})
+                return TemplateResponse(request, 'refillment.html', {'error_msg': message})
 
             user_net = None
             if not Transaction.objects.filter(user = user).exists():
@@ -210,7 +210,7 @@ def refillment_api(request):
             user_net.net = user_net.net + price
             user_net.save()
 
-        return render(request, 'refillment.html')
+        return TemplateResponse(request, 'refillment.html')
 class IndexView(View):
     form_class = UserForm
     template_name = 'index.html'
@@ -226,7 +226,7 @@ class IndexView(View):
             list_movies[genre] = movie_in_genre
             # list_movies.append(movie_in_genre)
 
-        return render(request,'index.html',{'all_movies':all_movies,'all_genres':all_genres, 'list_movies':list_movies})
+        return TemplateResponse(request,'index.html',{'all_movies':all_movies,'all_genres':all_genres, 'list_movies':list_movies})
 
 
     def post(self, request):
@@ -236,9 +236,9 @@ class IndexView(View):
             password = form.cleaned_data['password']
             user.set_password(password)
             user.save()
-            return render(request, self.template_name, {'form': form})
+            return TemplateResponse(request, self.template_name, {'form': form})
 
-        return render(request, self.template_name, {'form': form, 'invalid_register': True})
+        return TemplateResponse(request, self.template_name, {'form': form, 'invalid_register': True})
 
 
 class DescriptionView(View):
@@ -249,7 +249,7 @@ class DescriptionView(View):
         movie = Movie.objects.get(id=movie_id)
         rating = Rating.objects.filter(movie=movie).aggregate(Avg('rating'))['rating__avg']
         movie.movie_teaser_url = self.convertLink(movie.movie_teaser_url)
-        return render(request, 'description.html',{ 'movie':movie, 'rating': rating })
+        return TemplateResponse(request, 'description.html',{ 'movie':movie, 'rating': rating })
 
     def convertLink(self, link):
         str = link
@@ -260,4 +260,4 @@ class PolicyView(View):
     template_name = 'privacypolicy.html'
 
     def get(self, request):
-        return render(request, self.template_name)
+        return TemplateResponse(request, self.template_name)
