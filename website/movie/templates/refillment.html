@@ -2,22 +2,36 @@
 {% block title %} Refillment System {% endblock %}
 {% block content %}
     {% if error_msg %}
-        <span class="text-danger small" id="error-message">{{ error_msg }}</span>
+    <div class="alert alert-danger alert-dismissable fade in affix-top" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <strong>{{ error_msg }}</strong>
+    </div>
+
+    {% elif success_msg %}
+    <div class="alert alert-success alert-dismissable fade in affix-top" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <strong>{{ success_msg }}</strong>
+    </div>
     {% endif %}
+
   {% if user.is_superuser %}
   <form class="form-refillment" action="{% url 'movie:refillment' %}" method="post">
   {% csrf_token %}
     <div class="form-group row">
         <label for="serial-price" class="col-sm-12 col-md-2">Price: </label>
         <div class="col-xs-12 col-md-6">
-          <input class="form-control" id="serial-price" name="price" placeholder="price" type="number">
+          <input class="form-control" id="serial-price" name="price" min="50" placeholder="" type="number">
         </div>
     </div>
 
     <div class="form-group row">
         <label for="serial-amount" class="col-sm-12 col-md-2">Amount: </label>
         <div class="col-xs-12 col-md-6">
-          <input class="form-control" id="serial-amount" name="amount" placeholder="amount" type="number">
+          <input class="form-control" id="serial-amount" name="amount" min="1" placeholder="" type="number">
         </div>
     </div>
 
@@ -27,7 +41,7 @@
       </div>
     </div>
   </form>
-  
+
   {% else %}
   <form class="form-refillment" action="{% url 'movie:refillment' %}" method="post">
   {% csrf_token %}

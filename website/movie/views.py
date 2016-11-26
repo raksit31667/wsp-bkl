@@ -172,11 +172,15 @@ def refillment_api(request):
     user = request.user
     if user.is_superuser:
         if(request.POST):
+            if request.POST['price'] == '' or request.POST['amount'] == '':
+                return render(request, 'refillment.html', {'error_msg': 'Please complete all information requested on this form.'})
+
             price = int(request.POST['price'])
             amount = int(request.POST['amount'])
             for i in range(0, amount):
                 code = generate_code()
                 serial = Serial.objects.create(serial_code=code, price=price)
+            return render(request, 'refillment.html', {'success_msg': 'Success! You have generated %d baht for %d serials.' % (price, amount)})
         return render(request, 'refillment.html')
     else:
         if (request.POST):
@@ -190,11 +194,11 @@ def refillment_api(request):
                     serial_obj.is_active = False
                     serial_obj.save()
                 else:
-                    message = "This serial is not active or already been used."
+                    message = "This serial code is not active or already in use."
                     return render(request, 'refillment.html', {'error_msg': message})
 
             else:
-                message = "This serial code does not exist."
+                message = "Invalid serial code, please try again"
                 return render(request, 'refillment.html', {'error_msg': message})
 
             user_net = None
