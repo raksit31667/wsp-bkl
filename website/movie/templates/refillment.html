@@ -22,7 +22,7 @@
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-      <strong>Success! </strong>{{success_customer_msg}}<a href="#" class="alert-link">here</a>.
+      <strong>Success! </strong>{{success_customer_msg}}<a href="{% url 'movie:transaction' %}" class="alert-link">here</a>.
     </div>
     {% endif %}
 
