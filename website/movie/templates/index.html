@@ -1,6 +1,16 @@
 {% extends 'base.html' %}
 {% block title %} BKL Movie Streaming Service {% endblock %}
 {% block content %}
+
+    {% if user.is_active %}
+    <div class="alert alert-success alert-dismissable fade in affix-top" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <strong>Welcome back {{user}} !</strong>
+    </div>
+    {% endif %}
+
     <div class="app-content-row">
       <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10"><span class="topic-genre">All Movies</span></div>
       <form action="{% url 'movie:filter' 'all' 'movie_name' %}" method="post">
