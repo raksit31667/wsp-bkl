@@ -45,17 +45,17 @@ function getCookie(name) {
       msg = "";
       if (password!=password2){
         registerable = false;
-        msg = "Passwords are not the same"
+        msg = "Passwords are not the same."
       }
 
       if(username==""||email==""||password==""||password2==""){
         registerable = false;
-        msg = "Please input all the of fields"
+        msg = "Please complete all information requested on this form."
       }
 
       if (!checkPolicy.is(':checked')){
         registerable = false;
-        msg = "Please accept our policy"
+        msg = "Please accept our policy."
       }
 
       err.text(msg);
