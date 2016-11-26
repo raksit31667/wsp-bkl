@@ -180,7 +180,7 @@ def refillment_api(request):
             for i in range(0, amount):
                 code = generate_code()
                 serial = Serial.objects.create(serial_code=code, price=price)
-            return TemplateResponse(request, 'refillment.html', {'success_msg': 'Success! You have generated %d baht for %d serials.' % (price, amount)})
+            return TemplateResponse(request, 'refillment.html', {'success_admin_msg': 'Success! You have generated %d baht for %d serials.' % (price, amount)})
         return TemplateResponse(request, 'refillment.html')
     else:
         if (request.POST):
@@ -209,6 +209,9 @@ def refillment_api(request):
             Transaction.objects.create(user = user, price = price, net = user_net.net + price)
             user_net.net = user_net.net + price
             user_net.save()
+
+            message = "You can check the refillment "
+            return TemplateResponse(request, 'refillment.html', {'success_customer_msg': message})
 
         return TemplateResponse(request, 'refillment.html')
 class IndexView(View):
