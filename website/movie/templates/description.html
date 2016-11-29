@@ -20,20 +20,20 @@
         </div>
         {% if user.is_authenticated and own %}
         <div class="row cell">
-          <button id = "clickWatch" class="btn btn-green" type="button" data-toggle="modal"
+          <button id = "clickWatch" class="btn btn-small btn-green" type="button" data-toggle="modal"
           data-target="#watchOnline"><span class="glyphicon glyphicon-play"></span> Watch Online</button>
 
-          <a class="btn btn-green" href="{% url 'movie:download_api' movie.id%}"><span class="glyphicon glyphicon-save"></span> Download</a>
-          <button id = "clickReview" class="btn btn-green" type="button" data-toggle="modal"
+          <a class="btn btn-small btn-green" href="{% url 'movie:download_api' movie.id%}"><span class="glyphicon glyphicon-save"></span> Download</a>
+          <button id = "clickReview" class="btn btn-small btn-green" type="button" data-toggle="modal"
           data-target="#review"><span class="glyphicon glyphicon-star"></span> Review</button>
         </div>
         {% endif %}
         {% if not own %}
         <form action="{% url 'movie:buy_api' movie.id %}" method="post">
         {% csrf_token %}
-          <div class="form-group">
-            <div class="col-xs-12 col-md-4">
-              <button type="submit" class="col-xs-12 col-md-4 btn btn-modal">BUY {{movie.movie_price}}</button>
+          <div class="row">
+            <div class="col-xs-8 col-xs-offset-2">
+              <button type="submit" class="col-xs-12 btn btn-green"><span class="glyphicon glyphicon-usd"></span> Buy {{movie.movie_price}} Baht</button>
             </div>
           </div>
         </form>

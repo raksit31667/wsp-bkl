@@ -229,6 +229,7 @@ def buy_api(request, movie_id):
             return HttpResponse("Your already own the movie")
         if((userNet.net < movie.movie_price)):
             return HttpResponse("Your money is not enough")
+        Transaction.objects.create(user = user, price = -movie.movie_price, net = userNet.net - movie.movie_price)
         UserOwn.objects.create(user = user, movie = movie)
         return HttpResponseRedirect('/movie/'+str(movie.id))
     return HttpResponse("Please Login")
