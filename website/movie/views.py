@@ -234,15 +234,19 @@ def buy_api(request, movie_id):
         return HttpResponseRedirect('/movie/'+str(movie.id))
     return HttpResponse("Please Login")
 
-def library_api(request):
-    list_own_movies = []
-    user = request.user
-    user_own = UserOwn.objects.filter(user=user)
+class LibraryView(View):
+    form_class = UserForm
+    template_name = 'library.html'
 
-    for own_movie in user_own:
-        list_own_movies.append(own_movie.movie)
+    def get(self,request):
+        list_own_movies = []
+        user = request.user
+        user_own = UserOwn.objects.filter(user=user)
 
-    return TemplateResponse(request, 'library.html',{'list_own_movies':list_own_movies,'user_own':user_own,})
+        for own_movie in user_own:
+            list_own_movies.append(own_movie.movie)
+
+        return TemplateResponse(request, 'library.html',{'list_own_movies':list_own_movies})
 
 class IndexView(View):
     form_class = UserForm
