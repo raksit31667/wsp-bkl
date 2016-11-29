@@ -1,0 +1,43 @@
+<div class="modal fade" id="buy-modal" tabindex="-1" role="dialog" aria-labelledby="buy-modal-label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <p class="modal-title" id="buy-modal-label">Confirmation</p>
+      </div>
+      <div class="modal-body">
+        <span class="text-danger small" id="buy-error-message"></span>
+        <form class="form-horizontal" id="buy-form">
+          {% csrf_token %}
+            <div class="form-group">
+              <h4 class="modal-text text-center">User: {{user}}</h4>
+              <h4 class="modal-text text-center">Movie: {{movie.movie_name}}</h4>
+              <h4 class="modal-text text-center">You Current Balance: {{user_net}}</h4>
+              <h4 class="modal-text text-center">Movie Price: {{movie.movie_price}}</h4>
+              <h4 id="modal-text-remaining" class="modal-text text-center">Your Remaining Balance: </h4>
+            </div>
+
+          <div class="modal-input-button">
+            <div class="form-group">
+              <div class="col-md-6 col-xs-12">
+                <button type="button" id="btn-buy-confirm" class="col-xs-12 btn btn-modal">Confirm</button>
+              </div>
+              <div class="col-md-6 col-xs-12">
+                <button type="button" id="btn-buy-discard" class="col-xs-12 btn btn-modal">Discard</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(function() {
+    var remaining = {{user_net}} - {{movie.movie_price}}
+    $('#modal-text-remaining').text("Your Remaining Balance: " + remaining)
+  })
+</script>
