@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %} BKL Movie Streaming Service {% endblock %}
 {% block content %}
-  <div class="app-content-desc">
+<div class="app-content-desc">
   <div class="app-content-row">
     <span class="topic-style">{{movie.movie_name}}</span>
   </div>
@@ -29,11 +29,11 @@
         </div>
         {% endif %}
         {% if not own %}
-        <form action="{% url 'movie:buy_api' movie.id %}" method="post">
-        {% csrf_token %}
+        <form id="form-buy" action="{% url 'movie:buy_api' movie.id %}" method="post">
+          {% csrf_token %}
           <div class="row">
             <div class="col-xs-8 col-xs-offset-2">
-              <button type="submit" class="col-xs-12 btn btn-green"><span class="glyphicon glyphicon-usd"></span> Buy {{movie.movie_price}} Baht</button>
+              <button type="button" id='btn-buy' class="col-xs-12 btn btn-green"><span class="glyphicon glyphicon-usd"></span> Buy {{movie.movie_price}} Baht</button>
             </div>
           </div>
         </form>
@@ -65,6 +65,8 @@
   </div>
 </div>
 
+{% include 'buy_modal.html' %}
+
 {% endblock %}
 
 {% block player %}
@@ -72,53 +74,65 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <video id = "iframe" controls preload=metadata poster="{{movie.movie_thumbnail.url}}">
-          <source src="{{movie.movie_file.url}}" type="video/mp4">
-      </video>
+        <source src="{{movie.movie_file.url}}" type="video/mp4">
+        </video>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="modal fade" id="review" tabindex="-1" role="dialog" aria-labelledby="review-modal-label" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <p class="modal-title" id="review-modal-label">Review</p>
-      </div>
-      <div class="modal-body">
-        <form class="form-horizontal" id="review-form" action="{% url 'movie:rating_api' movie.id %}" method="post">
-          {% csrf_token %}
-          <div class = "modal-input-field">
-            <div class="form-group form-rating">
-              <input type="hidden" class="rating" name="rating"/>
-            </div>
+  <div class="modal fade" id="review" tabindex="-1" role="dialog" aria-labelledby="review-modal-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <p class="modal-title" id="review-modal-label">Review</p>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal" id="review-form" action="{% url 'movie:rating_api' movie.id %}" method="post">
+            {% csrf_token %}
+            <div class = "modal-input-field">
+              <div class="form-group form-rating">
+                <input type="hidden" class="rating" name="rating"/>
+              </div>
 
-          <div class="modal-input-button">
-            <div class="form-group">
-              <button type="submit" class="col-xs-12 btn btn-modal">Submit</button>
-            </div>
+              <div class="modal-input-button">
+                <div class="form-group">
+                  <button type="submit" class="col-xs-12 btn btn-modal">Submit</button>
+                </div>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-<script>
-$(function(){
-    $('#watchOnline').modal({
+    <script>
+    $(function(){
+      $('#watchOnline').modal({
         show: false
-    }).on('hidden.bs.modal', function(){
+      }).on('hidden.bs.modal', function(){
         $(this).find('video')[0].pause();
+      });
+
+      $('#btn-buy').click(function() {
+        $('#buy-modal').modal('toggle')
+      })
+
+      $('#btn-buy-confirm').click(function() {
+        $('#form-buy').submit()
+      })
+
+      $('#btn-buy-discard').click(function() {
+        $('#buy-modal').modal('hide')
+      })
+
+      // $('.rating').on('change', function () {
+      //   alert($(this).val());
+      // });
+
     });
-
-    // $('.rating').on('change', function () {
-    //   alert($(this).val());
-    // });
-
-  });
-</script>
-{% endblock %}
- <!-- width="560" height="315" frameborder="0" -->
+    </script>
+    {% endblock %}
+    <!-- width="560" height="315" frameborder="0" -->

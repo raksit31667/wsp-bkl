@@ -21,6 +21,10 @@
   margin-bottom: 20px;
 }
 
+.modal-body .modal-text {
+  color: white;
+}
+
 .modal-title{
   font-size: 30px;
   font-weight: bold;
