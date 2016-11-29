@@ -6,7 +6,7 @@ from django.views.generic import View
 from django.utils.safestring import mark_safe
 from django.urls import reverse
 from django.db.models import Avg, Count
-from .models import Genre, Movie, Rating, Serial, Transaction, UserNet
+from .models import Genre, Movie, Rating, Serial, Transaction, UserNet, UserOwn
 from .forms import UserForm
 from django.http import HttpResponse, HttpResponseRedirect
 from wsgiref.util import FileWrapper
@@ -219,6 +219,20 @@ def transaction_api(request):
     records = Transaction.objects.filter(user=request.user)
     return TemplateResponse(request, 'transaction.html', {'records': records})
 
+def buy_api(request, movie_id):
+    if(request.POST):
+        user = request.user
+        userNet = UserNet.objects.get(user=user)
+        movie = Movie.objects.get(pk=movie_id)
+        userOwn = UserOwn.objects.filter(user=user, movie=movie)
+        if(userOwn.exists()):
+            return HttpResponse("Your already own the movie")
+        if((userNet.net < movie.movie_price)):
+            return HttpResponse("Your money is not enough")
+        UserOwn.objects.create(user = user, movie = movie)
+        return HttpResponseRedirect('/movie/'+str(movie.id))
+    return HttpResponse("Please Login")
+
 class IndexView(View):
     form_class = UserForm
     template_name = 'index.html'
@@ -257,7 +271,11 @@ class DescriptionView(View):
         movie = Movie.objects.get(id=movie_id)
         rating = Rating.objects.filter(movie=movie).aggregate(Avg('rating'))['rating__avg']
         movie.movie_teaser_url = self.convertLink(movie.movie_teaser_url)
-        return TemplateResponse(request, 'description.html',{ 'movie':movie, 'rating': rating })
+        own = False
+        if(request.user.is_authenticated() and UserOwn.objects.filter(user=request.user,movie=movie).exists()):
+            own= True
+
+        return TemplateResponse(request, 'description.html',{ 'movie':movie, 'rating': rating, 'own':own })
 
     def convertLink(self, link):
         str = link

@@ -29,6 +29,8 @@ class Movie(models.Model):
     def get_avg_rating(self):
         return Rating.objects.filter(movie=self).aggregate(Avg('rating'))['rating__avg']
 
+
+
 class Rating(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     user = models.ForeignKey(User, default=1)
@@ -63,3 +65,10 @@ class UserNet(models.Model):
 
     def __str__(self):
         return "%s has %d." % (self.user, self.net)
+
+class UserOwn(models.Model):
+    user = models.ForeignKey(User, default=1)
+    movie = models.ForeignKey(Movie)
+
+    def __str__(self):
+        return "%s has %s." % (self.user, self.movie)

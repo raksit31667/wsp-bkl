@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^api/register/$', views.register_api, name="register_api"),
     url(r'^api/download/([0-9]+)/$',views.download_api, name='download_api'),
     url(r'^api/rating/([0-9]+)/$',views.rating_api, name='rating_api'),
+    url(r'^api/buy/([0-9]+)$',views.buy_api , name='buy_api'),
     url(r'^filter/(?P<genre>[-\w ]+)/(?P<sortby>[-\w ]+)/$', views.filter, name="filter"),
     url(r'^search/$', views.search_movie, name="search"),
     url(r'^([0-9]+)/$',views.DescriptionView.as_view() , name='description'),
