@@ -18,7 +18,7 @@
             <iframe src="{{movie.movie_teaser_url}}" ></iframe>
           </div>
         </div>
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated and own %}
         <div class="row cell">
           <button id = "clickWatch" class="btn btn-green" type="button" data-toggle="modal"
           data-target="#watchOnline"><span class="glyphicon glyphicon-play"></span> Watch Online</button>
@@ -27,8 +27,9 @@
           <button id = "clickReview" class="btn btn-green" type="button" data-toggle="modal"
           data-target="#review"><span class="glyphicon glyphicon-star"></span> Review</button>
         </div>
-
-        <form action="{% url 'movie:buy_api' %}" method="post">
+        {% endif %}
+        {% if not own %}
+        <form action="{% url 'movie:buy_api' movie.id %}" method="post">
         {% csrf_token %}
           <div class="form-group">
             <div class="col-xs-12 col-md-4">

@@ -29,6 +29,8 @@ class Movie(models.Model):
     def get_avg_rating(self):
         return Rating.objects.filter(movie=self).aggregate(Avg('rating'))['rating__avg']
 
+
+
 class Rating(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     user = models.ForeignKey(User, default=1)
