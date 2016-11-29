@@ -2,7 +2,7 @@
 {% block title %} BKL Movie Streaming Service {% endblock %}
 {% block content %}
 
-<h1>{{list_own_movies}}{{user_own.user}}</h1>
+<h1>Library</h1>
 {% for movie in list_own_movies %}
     {% include "card.html" %}
 {% endfor %}
