@@ -99,9 +99,13 @@ body{
 }
 .app-content .btn-green{
   background-color: #4caf50;
-  min-width: 200px;
   color: #fff;
-  margin: 1rem;
+  margin-top: 1rem;
+}
+
+.btn-small {
+    min-width: 200px;
+    margin: 1rem;
 }
 .app-content .btn-green:hover{
   background-color: #43a047;
