@@ -27,6 +27,15 @@
           <button id = "clickReview" class="btn btn-green" type="button" data-toggle="modal"
           data-target="#review"><span class="glyphicon glyphicon-star"></span> Review</button>
         </div>
+
+        <form action="{% url 'movie:buy_api' %}" method="post">
+        {% csrf_token %}
+          <div class="form-group">
+            <div class="col-xs-12 col-md-4">
+              <button type="submit" class="col-xs-12 col-md-4 btn btn-modal">BUY {{movie.movie_price}}</button>
+            </div>
+          </div>
+        </form>
         {% endif %}
       </div>
     </div>

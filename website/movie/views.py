@@ -6,7 +6,7 @@ from django.views.generic import View
 from django.utils.safestring import mark_safe
 from django.urls import reverse
 from django.db.models import Avg, Count
-from .models import Genre, Movie, Rating, Serial, Transaction, UserNet
+from .models import Genre, Movie, Rating, Serial, Transaction, UserNet, UserOwn
 from .forms import UserForm
 from django.http import HttpResponse, HttpResponseRedirect
 from wsgiref.util import FileWrapper
@@ -218,6 +218,18 @@ def refillment_api(request):
 def transaction_api(request):
     records = Transaction.objects.filter(user=request.user)
     return TemplateResponse(request, 'transaction.html', {'records': records})
+
+def buy_api(request):
+    if(request.POST):
+        user = request.user
+        userNet = UserNet.objects.get(user=user)
+        movie = Movie.objects.get(pk=5)
+
+        if(userNet.net >= movie.movie_price):
+            UserOwn.objects.create(user = user, movie = movie)
+            return HttpResponse("Transaction Complete")
+        return HttpResponse("Your money is not enought")
+    return HttpResponse("Please Login")
 
 class IndexView(View):
     form_class = UserForm

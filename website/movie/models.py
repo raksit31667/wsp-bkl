@@ -63,3 +63,10 @@ class UserNet(models.Model):
 
     def __str__(self):
         return "%s has %d." % (self.user, self.net)
+
+class UserOwn(models.Model):
+    user = models.ForeignKey(User, default=1)
+    movie = models.ForeignKey(Movie)
+
+    def __str__(self):
+        return "%s has %s." % (self.user, self.movie)
