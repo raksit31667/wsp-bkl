@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %} 404 Page Not Found {% endblock %}
+{% block content %}
+
+<h1 style="font-size: 120px; padding-bottom: 36px" class="text-center">404</h1>
+<h3 style="padding-bottom: 36px" class="text-center">Sorry, the page you're looking for cannot be found.</h3>
+<h3 class="text-center">Visit our <a href="{% url 'movie:index' %}">Homepage</a> or try searching</h3>
+
+{% endblock %}
