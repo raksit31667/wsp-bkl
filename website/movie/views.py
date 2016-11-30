@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.template import RequestContext
 from django import forms
 from django.views.generic import View
 from django.utils.safestring import mark_safe
@@ -11,10 +12,10 @@ from .forms import UserForm
 from django.http import HttpResponse, HttpResponseRedirect
 from wsgiref.util import FileWrapper
 from django.template.response import TemplateResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render_to_response
 from django.http import JsonResponse
 from random import randint
-import json
+import json, time
 
 def movies(request):
     movies = list(Movie.objects.values_list('movie_name', flat=True))
@@ -231,11 +232,20 @@ def transaction_api(request):
     return TemplateResponse(request, 'transaction.html', {'records': records})
 
 def receipt_api(request, movie_id):
-    user = request.user
-    user_net = UserNet.objects.get(user=user).net
-    movie = Movie.objects.get(pk=movie_id)
-    transaction = Transaction.objects.filter(user=user).last()
-    return TemplateResponse(request, 'receipt.html', {'movie': movie,'transaction': transaction, 'remaining': user_net - movie.movie_price})
+    time.sleep(2)
+    if request.session.get('has_published') is None or request.session.get('has_published') == True:
+        return render(request, '404.html')
+    else:
+        user = request.user
+        user_net = UserNet.objects.get(user=user)
+        movie = Movie.objects.get(pk=movie_id)
+        transaction = Transaction.objects.filter(user=user).last()
+        has_published = request.session.get('has_published')
+        request.session['has_published'] = True
+        before = user_net.net
+        user_net.net = user_net.net - movie.movie_price
+        user_net.save()
+        return TemplateResponse(request, 'receipt.html', {'movie': movie,'transaction': transaction, 'before': before, 'remaining': transaction.net, 'has_published': has_published})
 
 def buy_api(request, movie_id):
     if(request.POST):
@@ -251,9 +261,8 @@ def buy_api(request, movie_id):
             return redirect('movie:description', movie_id=movie_id)
         Transaction.objects.create(user = user, price = -movie.movie_price, net = userNet.net - movie.movie_price)
         UserOwn.objects.create(user = user, movie = movie)
-        userNet.net = userNet.net - movie.movie_price
-        userNet.save()
         request.session['success_msg'] = "You can check your purchased movies "
+        request.session['has_published'] = False
         return redirect('movie:description', movie_id=movie_id)
     return redirect('movie:description', movie_id=movie_id)
 
@@ -326,9 +335,6 @@ class DescriptionView(View):
     def convertLink(self, link):
         str = link
         return str.replace('watch?v=', 'embed/')
-
-# class ReceiptView(View):
-#     username =
 
 class PolicyView(View):
     form_class = UserForm
