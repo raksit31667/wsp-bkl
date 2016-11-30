@@ -216,11 +216,7 @@ def refillment_api(request):
                 message = "Invalid serial code, please try again"
                 return TemplateResponse(request, 'refillment.html', {'error_msg': message})
 
-            user_net = None
-            if not Transaction.objects.filter(user = user).exists():
-                user_net = UserNet.objects.create(user = user, net=0)
-            else:
-                user_net = UserNet.objects.get(user = user)
+            user_net = UserNet.objects.get(user = user)
             Transaction.objects.create(user = user, price = price, net = user_net.net + price)
             user_net.net = user_net.net + price
             user_net.save()
@@ -248,6 +244,8 @@ def buy_api(request, movie_id):
             return redirect('movie:description', movie_id=movie_id)
         Transaction.objects.create(user = user, price = -movie.movie_price, net = userNet.net - movie.movie_price)
         UserOwn.objects.create(user = user, movie = movie)
+        userNet.net = userNet.net - movie.movie_price
+        userNet.save()
         request.session['success_msg'] = "You can check your purchased movies "
         return redirect('movie:description', movie_id=movie_id)
     return redirect('movie:description', movie_id=movie_id)
@@ -312,7 +310,7 @@ class DescriptionView(View):
         own = False
         if(request.user.is_authenticated() and UserOwn.objects.filter(user=request.user,movie=movie).exists()):
             own= True
-        return TemplateResponse(request, 'description.html',{ 'movie':movie, 'rating': rating, 'bonuses':bonuses, 'own':own })
+        return TemplateResponse(request, 'description.html',{ 'movie':movie, 'rating': rating, 'error_msg': error_msg, 'success_msg': success_msg, 'bonuses':bonuses, 'own':own })
 
     def convertLink(self, link):
         str = link

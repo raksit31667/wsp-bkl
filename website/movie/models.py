@@ -57,7 +57,7 @@ class Transaction(models.Model):
         if(self.price > 0):
             return "%s refilled %d.(%s)" % (self.user, self.price, self.timestamp)
         else:
-            return self.user
+            return "%s bought a movie for %d baht (%s)" % (self.user, self.price, self.timestamp)
 
 class UserNet(models.Model):
     user = models.ForeignKey(User, default=1)
