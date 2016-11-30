@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^api/logout/$', views.logout_api, name="logout_api"),
     url(r'^api/register/$', views.register_api, name="register_api"),
     url(r'^api/download/(?P<movie_id>[0-9]+)/$',views.download_api, name='download_api'),
+    url(r'^api/download_bonus/(?P<movie_id>[0-9]+)/$',views.download_bonus_api, name='download_bonus_api'),
     url(r'^api/rating/(?P<movie_id>[0-9]+)/$',views.rating_api, name='rating_api'),
     url(r'^api/buy/(?P<movie_id>[0-9]+)/$',views.buy_api , name='buy_api'),
     url(r'^filter/(?P<genre>[-\w ]+)/(?P<sortby>[-\w ]+)/$', views.filter, name="filter"),

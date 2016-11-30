@@ -6,7 +6,7 @@ from django.views.generic import View
 from django.utils.safestring import mark_safe
 from django.urls import reverse
 from django.db.models import Avg, Count
-from .models import Genre, Movie, Rating, Serial, Transaction, UserNet, UserOwn
+from .models import Genre, Movie, Rating, Serial, Transaction, UserNet, UserOwn, MovieBonus
 from .forms import UserForm
 from django.http import HttpResponse, HttpResponseRedirect
 from wsgiref.util import FileWrapper
@@ -125,10 +125,23 @@ def logout_api(request):
 def download_api(request, movie_id):
     m = Movie.objects.get(pk=movie_id)
     u = request.user
+    print(m)
+    print(u)
     if(u.is_authenticated() and isUserOwn(u,m)):
         file = FileWrapper(open(m.movie_file.path, 'rb'))
         response = HttpResponse(file, content_type='application/octet-stream')
         response['Content-Disposition'] = str('attachment; filename='+m.movie_file.name)
+        return response
+    return HttpResponse("FUCK")
+    # Not return anything if client force to download without buy it
+
+def download_bonus_api(request, bonus_id):
+    b = MovieBonus.objects.get(pk=bonus_id)
+    u = request.user
+    if(u.is_authenticated() and isUserOwn(u,b.movie)):
+        file = FileWrapper(open(b.bonus_file.path, 'rb'))
+        response = HttpResponse(file, content_type='application/octet-stream')
+        response['Content-Disposition'] = str('attachment; filename='+b.bonus_file.name)
         return response
     # Not return anything if client force to download without buy it
 
