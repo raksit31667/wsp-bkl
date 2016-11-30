@@ -86,7 +86,9 @@
         			</form>
         			<ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
+                {% if not user.is_superuser %}
                 <li><a>Balance: {{user_net}}</a></li>
+                {% endif %}
                 <li><a>{{user.username}}</a></li>
                 <li><a href="{% url 'movie:logout_api' %}">Logout</a></li>
                 {% else %}

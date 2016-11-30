@@ -133,7 +133,7 @@ def download_api(request, movie_id):
         response = HttpResponse(file, content_type='application/octet-stream')
         response['Content-Disposition'] = str('attachment; filename='+m.movie_file.name)
         return response
-    return HttpResponse("FUCK")
+    return redirect('movie:description', movie_id=movie_id)
     # Not return anything if client force to download without buy it
 
 def download_bonus_api(request, bonus_id):

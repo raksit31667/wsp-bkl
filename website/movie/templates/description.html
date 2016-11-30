@@ -41,7 +41,9 @@
           <button id = "clickWatch" class="btn btn-small btn-green" type="button" data-toggle="modal"
           data-target="#watchOnline"><span class="glyphicon glyphicon-play"></span> Watch Online</button>
 
+          {% if not user.is_superuser %}
           <a class="btn btn-small btn-green" href="{% url 'movie:download_api' movie.id%}"><span class="glyphicon glyphicon-save"></span> Download</a>
+          {% endif %}
           <button id = "clickReview" class="btn btn-small btn-green" type="button" data-toggle="modal"
           data-target="#review"><span class="glyphicon glyphicon-star"></span> Review</button>
         </div>
@@ -50,7 +52,7 @@
           <div class="panel panel-primary">
             <div class="panel-heading">
               <h4 class="panel-title text-center">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1"><span class="glyphicon glyphicon-folder-open"></span> Attachment</a>
+                <a data-toggle="collapse" id="a-attached" data-parent="#accordion" href="#collapse1"><span class="glyphicon glyphicon-folder-open"></span> Attachment</a>
               </h4>
             </div>
             <div id="collapse1" class="panel-collapse collapse in">
@@ -169,6 +171,8 @@
       $('#btn-buy-discard').click(function() {
         $('#buy-modal').modal('hide')
       })
+
+      $("#a-attached").click()
 
       // $('.rating').on('change', function () {
       //   alert($(this).val());
