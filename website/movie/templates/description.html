@@ -1,6 +1,24 @@
 {% extends 'base.html' %}
 {% block title %} BKL Movie Streaming Service {% endblock %}
 {% block content %}
+
+{% if error_msg %}
+<div class="alert alert-danger alert-dismissable fade in affix-top" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <strong>{{ error_msg }}</strong>
+</div>
+
+{% elif success_msg %}
+<div class="alert alert-success alert-dismissable fade in affix-top" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <strong>Thank you for choosing us! </strong>{{success_msg}}<a href="{% url 'movie:library' %}" class="alert-link">here</a>.
+</div>
+{% endif %}
+
 <div class="app-content-desc">
   <div class="app-content-row">
     <span class="topic-style">{{movie.movie_name}}</span>
