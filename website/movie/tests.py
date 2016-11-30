@@ -3,11 +3,11 @@ from django.core.files import File
 from django.contrib.auth.models import User
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.core.urlresolvers import reverse
-from .models import Genre, Movie, Rating, Serial
+from .models import Genre, Movie, Rating, Serial, Transaction, UserNet, UserOwn
 
 import json
 
-from .views import filter, search_movie, login_api, refillment_api
+from .views import filter, search_movie, login_api, refillment_api, buy_api
 
 # Create your tests here.
 
@@ -129,6 +129,89 @@ class BKLTestCase(TestCase):
         num_serials_after = len(Serial.objects.all())
 
         expected = 'Success! You have generated 100 baht for 5 serials.'
-        result = response.context_data['success_msg']
+        result = response.context_data['success_admin_msg']
         self.assertEqual(num_serials_before + 5, num_serials_after)
         self.assertEqual(expected, result)
+
+        request = self.factory.get('/')
+        request.user = self.test_user1
+
+        mutable = request.POST._mutable
+        request.POST._mutable = True
+        request.POST['serial'] = ''
+        request.POST._mutable = mutable
+
+        response = refillment_api(request)
+        expected = 'Invalid serial code, please try again'
+        result = response.context_data['error_msg']
+        self.assertEqual(expected, result)
+
+        test_serial = Serial.objects.get(pk=1).serial_code
+        mutable = request.POST._mutable
+        request.POST._mutable = True
+        request.POST['serial'] = test_serial
+        request.POST._mutable = mutable
+
+        response = refillment_api(request)
+        expected = 'You can check the refillment '
+        result = response.context_data['success_customer_msg']
+        self.assertEqual(expected, result)
+
+        response = refillment_api(request)
+        expected = 'This serial code is not active or already in use.'
+        result = response.context_data['error_msg']
+        self.assertEqual(expected, result)
+
+    def test_buy(self):
+        request = self.factory.get('/')
+        request.user = self.test_user1
+        response = buy_api(request, 2)
+        expected = 0
+        user_own = UserOwn.objects.filter(movie=self.test_movie2)
+        self.assertEqual(expected, len(user_own))
+
+        request.user = self.test_admin
+
+        mutable = request.POST._mutable
+        request.POST._mutable = True
+        request.POST['price'] = '100'
+        request.POST['amount'] = '5'
+        request.POST._mutable = mutable
+
+        response = refillment_api(request)
+
+        request.user = self.test_user1
+
+        test_serial = Serial.objects.get(pk=1).serial_code
+        mutable = request.POST._mutable
+        request.POST._mutable = True
+        request.POST['serial'] = test_serial
+        request.POST._mutable = mutable
+
+        response = refillment_api(request)
+
+        # Annotate a request object with a session
+        middleware = SessionMiddleware()
+        middleware.process_request(request)
+        request.session.save()
+
+        response = buy_api(request, 2)
+        expected = 1
+        user_own = UserOwn.objects.filter(movie=self.test_movie2)
+        self.assertEqual(expected, len(user_own))
+
+        expected_net = 50
+        user_net = UserNet.objects.get(user=self.test_user1)
+        result_net = user_net.net - self.test_movie2.movie_price
+        self.assertEqual(50, result_net)
+
+        # Annotate a request object with a session
+        middleware = SessionMiddleware()
+        middleware.process_request(request)
+        request.session.save()
+
+        request.user = self.test_user1
+        response = buy_api(request, 2)
+        expected = 1
+        user_own = UserOwn.objects.filter(movie=self.test_movie2)
+        self.assertEqual(expected, len(user_own))
