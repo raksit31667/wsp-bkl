@@ -201,6 +201,7 @@ def refillment_api(request):
             if does_serial_exist(code):
                 serial_obj = Serial.objects.get(serial_code = code)
                 if serial_obj.is_active:
+                    price = serial_obj.price
                     serial_obj.is_active = False
                     serial_obj.save()
                 else:
@@ -211,7 +212,12 @@ def refillment_api(request):
                 message = "Invalid serial code, please try again"
                 return TemplateResponse(request, 'refillment.html', {'error_msg': message})
 
-            user_net = UserNet.objects.get(user = user)
+            user_net = None
+            if not UserNet.objects.filter(user=user).exists():
+                user_net = UserNet.objects.create(user=user, net=0)
+            else:
+                user_net = UserNet.objects.get(user=user)
+
             Transaction.objects.create(user = user, price = price, net = user_net.net + price)
             user_net.net = user_net.net + price
             user_net.save()

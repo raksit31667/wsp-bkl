@@ -146,6 +146,9 @@ class BKLTestCase(TestCase):
         result = response.context_data['error_msg']
         self.assertEqual(expected, result)
 
+        request = self.factory.get('/')
+        request.user = self.test_user1
+
         test_serial = Serial.objects.get(pk=1).serial_code
         mutable = request.POST._mutable
         request.POST._mutable = True
@@ -156,6 +159,15 @@ class BKLTestCase(TestCase):
         expected = 'You can check the refillment '
         result = response.context_data['success_customer_msg']
         self.assertEqual(expected, result)
+
+        request = self.factory.get('/')
+        request.user = self.test_user1
+
+        test_serial = Serial.objects.get(pk=1).serial_code
+        mutable = request.POST._mutable
+        request.POST._mutable = True
+        request.POST['serial'] = test_serial
+        request.POST._mutable = mutable
 
         response = refillment_api(request)
         expected = 'This serial code is not active or already in use.'
@@ -170,48 +182,19 @@ class BKLTestCase(TestCase):
         user_own = UserOwn.objects.filter(movie=self.test_movie2)
         self.assertEqual(expected, len(user_own))
 
-        request.user = self.test_admin
-
-        mutable = request.POST._mutable
-        request.POST._mutable = True
-        request.POST['price'] = '100'
-        request.POST['amount'] = '5'
-        request.POST._mutable = mutable
-
-        response = refillment_api(request)
-
-        request.user = self.test_user1
-
-        test_serial = Serial.objects.get(pk=1).serial_code
-        mutable = request.POST._mutable
-        request.POST._mutable = True
-        request.POST['serial'] = test_serial
-        request.POST._mutable = mutable
-
-        response = refillment_api(request)
+        UserNet.objects.create(user=self.test_user1, net=100)
 
         # Annotate a request object with a session
         middleware = SessionMiddleware()
         middleware.process_request(request)
         request.session.save()
 
-        response = buy_api(request, 2)
-        expected = 1
-        user_own = UserOwn.objects.filter(movie=self.test_movie2)
+        response = buy_api(request, 1)
+        expected = 0
+        user_own = UserOwn.objects.filter(movie=self.test_movie1)
         self.assertEqual(expected, len(user_own))
 
         expected_net = 50
         user_net = UserNet.objects.get(user=self.test_user1)
         result_net = user_net.net - self.test_movie2.movie_price
         self.assertEqual(50, result_net)
-
-        # Annotate a request object with a session
-        middleware = SessionMiddleware()
-        middleware.process_request(request)
-        request.session.save()
-
-        request.user = self.test_user1
-        response = buy_api(request, 2)
-        expected = 1
-        user_own = UserOwn.objects.filter(movie=self.test_movie2)
-        self.assertEqual(expected, len(user_own))
