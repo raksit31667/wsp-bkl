@@ -122,13 +122,14 @@ def logout_api(request):
     return HttpResponseRedirect('/movie')
 
 def download_api(request, movie_id):
-    if(request.user.is_authenticated()):
-        m = Movie.objects.get(pk=movie_id)
+    m = Movie.objects.get(pk=movie_id)
+    u = request.user
+    if(u.is_authenticated() and isUserOwn(u,m)):
         file = FileWrapper(open(m.movie_file.path, 'rb'))
         response = HttpResponse(file, content_type='application/octet-stream')
         response['Content-Disposition'] = str('attachment; filename='+m.movie_file.name)
         return response
-    return HttpResponse("Please Login")
+    # Not return anything if client force to download without buy it
 
 def rating_api(request, movie_id):
     movie = Movie.objects.get(pk=movie_id)
@@ -302,3 +303,9 @@ class PolicyView(View):
 
     def get(self, request):
         return TemplateResponse(request, self.template_name)
+
+def isUserOwn(user,movie):
+    user_owns = UserOwn.objects.filter(user=user,movie=movie)
+    if user_owns.exists():
+        return True
+    return False
