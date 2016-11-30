@@ -72,3 +72,10 @@ class UserOwn(models.Model):
 
     def __str__(self):
         return "%s has %s." % (self.user, self.movie)
+
+class MovieBonus(models.Model):
+    movie = models.ForeignKey(Movie)
+    bonus_file = models.FileField()
+
+    def __str__(self):
+        return "%s has %s." % (self.movie, self.bonus_file.name)
