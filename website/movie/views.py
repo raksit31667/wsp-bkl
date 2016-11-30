@@ -234,6 +234,13 @@ def transaction_api(request):
     records = Transaction.objects.filter(user=request.user)
     return TemplateResponse(request, 'transaction.html', {'records': records})
 
+def receipt_api(request, movie_id):
+    user = request.user
+    user_net = UserNet.objects.get(user=user).net
+    movie = Movie.objects.get(pk=movie_id)
+    transaction = Transaction.objects.filter(user=user).last()
+    return TemplateResponse(request, 'receipt.html', {'movie': movie,'transaction': transaction, 'remaining': user_net - movie.movie_price})
+
 def buy_api(request, movie_id):
     if(request.POST):
         user = request.user
@@ -317,6 +324,9 @@ class DescriptionView(View):
     def convertLink(self, link):
         str = link
         return str.replace('watch?v=', 'embed/')
+
+# class ReceiptView(View):
+#     username =
 
 class PolicyView(View):
     form_class = UserForm
