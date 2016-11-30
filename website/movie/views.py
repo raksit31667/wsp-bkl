@@ -250,6 +250,10 @@ def buy_api(request, movie_id):
         return redirect('movie:description', movie_id=movie_id)
     return redirect('movie:description', movie_id=movie_id)
 
+def serials_api(request):
+    serials = Serial.objects.order_by('-is_active', '-pk')
+    return TemplateResponse(request, 'serial_list.html', {'serials': serials})
+
 class LibraryView(View):
     form_class = UserForm
     template_name = 'library.html'

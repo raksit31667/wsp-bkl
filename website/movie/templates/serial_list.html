@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %} Serials {% endblock %}
+{% block content %}
+<div class="table-responsive">
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Serial Code</th>
+      <th>Price</th>
+      <th>Active</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for serial in serials %}
+    <tr>
+      <td>{{serial.pk}}</td>
+      <td>{{serial.serial_code}}</td>
+      <td>{{serial.price}}</td>
+      <td>{{serial.is_active}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+</div>
+{% endblock %}

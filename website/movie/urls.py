@@ -18,5 +18,6 @@ urlpatterns = [
     url(r'^privacypolicy/$',views.PolicyView.as_view() , name='privacypolicy'),
     url(r'^refillment/$',views.refillment_api , name='refillment'),
     url(r'^transaction/$', views.transaction_api, name='transaction'),
+    url(r'^serials/$', views.serials_api, name='serials'),
     url(r'^library/$', views.LibraryView.as_view(), name='library'),
 ]
