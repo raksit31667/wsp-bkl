@@ -112,9 +112,6 @@ def register_api(request):
         registerable = False
 
     if registerable:
-        print(username)
-        print(password)
-        print(email)
         newUser(username, password, email)
 
     return JsonResponse({'registerable':registerable, 'msg': message})
@@ -126,8 +123,6 @@ def logout_api(request):
 def download_api(request, movie_id):
     m = Movie.objects.get(pk=movie_id)
     u = request.user
-    print(m)
-    print(u)
     if(u.is_authenticated() and isUserOwn(u,m)):
         file = FileWrapper(open(m.movie_file.path, 'rb'))
         response = HttpResponse(file, content_type='application/octet-stream')
@@ -206,7 +201,6 @@ def refillment_api(request):
             if does_serial_exist(code):
                 serial_obj = Serial.objects.get(serial_code = code)
                 if serial_obj.is_active:
-                    price = serial_obj.price
                     serial_obj.is_active = False
                     serial_obj.save()
                 else:
@@ -250,20 +244,19 @@ def receipt_api(request, movie_id):
 def buy_api(request, movie_id):
     if(request.POST):
         user = request.user
-        userNet = UserNet.objects.get(user=user)
+        user_net = UserNet.objects.get(user=user)
         movie = Movie.objects.get(pk=movie_id)
-        userOwn = UserOwn.objects.filter(user=user, movie=movie)
-        if(userOwn.exists()):
-            request.session['error_msg'] = "Your already owned the movie."
-            return redirect('movie:description', movie_id=movie_id)
-        if((userNet.net < movie.movie_price)):
+        user_own = UserOwn.objects.filter(user=user, movie=movie)
+
+        if user_net.net < movie.movie_price:
             request.session['error_msg'] = "Not enough money, please refill money or select an another movie."
-            return redirect('movie:description', movie_id=movie_id)
-        Transaction.objects.create(user = user, price = -movie.movie_price, net = userNet.net - movie.movie_price)
-        UserOwn.objects.create(user = user, movie = movie)
-        request.session['success_msg'] = "You can check your purchased movies "
-        request.session['has_published'] = False
-        return redirect('movie:description', movie_id=movie_id)
+
+        else:
+            Transaction.objects.create(user = user, price = -movie.movie_price, net = user_net.net - movie.movie_price)
+            UserOwn.objects.create(user = user, movie = movie)
+            request.session['success_msg'] = "You can check your purchased movies "
+            request.session['has_published'] = False
+
     return redirect('movie:description', movie_id=movie_id)
 
 def serials_api(request):
@@ -292,12 +285,10 @@ class IndexView(View):
         list_movies = {}
         all_movies = Movie.objects.all()[:4]
         all_genres = Genre.objects.all()
-        rating_dict = {}
 
         for genre in all_genres:
             movie_in_genre = Movie.objects.filter(genre=genre)[:4]
             list_movies[genre] = movie_in_genre
-            # list_movies.append(movie_in_genre)
 
         return TemplateResponse(request,'index.html',{'all_movies':all_movies,'all_genres':all_genres, 'list_movies':list_movies})
 
