@@ -10,7 +10,7 @@ def base_util(request):
     if user.is_authenticated:
         user_net = UserNet.objects.get
         if not UserNet.objects.filter(user=user).exists():
-            UserNet.objects.create(user=user, net=0)
+            UserNet.objects.filter(user=user, net=0)
         else:
             user_net = UserNet.objects.get(user=user).net
     return {

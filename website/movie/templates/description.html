@@ -163,6 +163,7 @@
 
       $('#btn-buy-confirm').click(function() {
         $('#form-buy').submit()
+        window.open("{% url 'movie:receipt' movie.id %}")
       })
 
       $('#btn-buy-discard').click(function() {
