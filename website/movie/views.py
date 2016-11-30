@@ -11,6 +11,7 @@ from .forms import UserForm
 from django.http import HttpResponse, HttpResponseRedirect
 from wsgiref.util import FileWrapper
 from django.template.response import TemplateResponse
+from django.shortcuts import redirect
 from django.http import JsonResponse
 from random import randint
 import json
@@ -227,13 +228,16 @@ def buy_api(request, movie_id):
         movie = Movie.objects.get(pk=movie_id)
         userOwn = UserOwn.objects.filter(user=user, movie=movie)
         if(userOwn.exists()):
-            return HttpResponse("Your already own the movie")
+            request.session['error_msg'] = "Your already owned the movie."
+            return redirect('movie:description', movie_id=movie.id)
         if((userNet.net < movie.movie_price)):
-            return HttpResponse("Your money is not enough")
+            request.session['error_msg'] = "Not enough money, please refill money or select an another movie."
+            return redirect('movie:description', movie_id=movie.id)
         Transaction.objects.create(user = user, price = -movie.movie_price, net = userNet.net - movie.movie_price)
         UserOwn.objects.create(user = user, movie = movie)
-        return HttpResponseRedirect('/movie/'+str(movie.id))
-    return HttpResponse("Please Login")
+        request.session['success_msg'] = "You can check your purchased movies "
+        return redirect('movie:description', movie_id=movie.id)
+    return redirect('movie:description', movie_id=movie.id)
 
 class LibraryView(View):
     form_class = UserForm
@@ -287,11 +291,15 @@ class DescriptionView(View):
         movie = Movie.objects.get(id=movie_id)
         rating = Rating.objects.filter(movie=movie).aggregate(Avg('rating'))['rating__avg']
         movie.movie_teaser_url = self.convertLink(movie.movie_teaser_url)
+        error_msg = request.session.get('error_msg')
+        success_msg = request.session.get('success_msg')
+        request.session['error_msg'] = None
+        request.session['success_msg'] = None
         own = False
         if(request.user.is_authenticated() and UserOwn.objects.filter(user=request.user,movie=movie).exists()):
             own= True
 
-        return TemplateResponse(request, 'description.html',{ 'movie':movie, 'rating': rating, 'own':own })
+        return TemplateResponse(request, 'description.html',{ 'movie':movie, 'rating': rating, 'own':own, 'error_msg': error_msg, 'success_msg': success_msg })
 
     def convertLink(self, link):
         str = link
