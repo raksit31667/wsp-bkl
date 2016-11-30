@@ -39,9 +39,11 @@
                     </ul>
                 </li>
                 {% if user.is_active %}
+                {% if not user.is_superuser %}
                 <li>
                     <a href="{% url 'movie:library' %}">Library</a>
                 </li>
+                {% endif %}
                 <li>
                     <a href="{% url 'movie:refillment' %}">Refillment</a>
                 </li>
