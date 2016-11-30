@@ -242,15 +242,15 @@ def buy_api(request, movie_id):
         userOwn = UserOwn.objects.filter(user=user, movie=movie)
         if(userOwn.exists()):
             request.session['error_msg'] = "Your already owned the movie."
-            return redirect('movie:description', movie_id=movie.id)
+            return redirect('movie:description', movie_id=movie_id)
         if((userNet.net < movie.movie_price)):
             request.session['error_msg'] = "Not enough money, please refill money or select an another movie."
-            return redirect('movie:description', movie_id=movie.id)
+            return redirect('movie:description', movie_id=movie_id)
         Transaction.objects.create(user = user, price = -movie.movie_price, net = userNet.net - movie.movie_price)
         UserOwn.objects.create(user = user, movie = movie)
         request.session['success_msg'] = "You can check your purchased movies "
-        return redirect('movie:description', movie_id=movie.id)
-    return redirect('movie:description', movie_id=movie.id)
+        return redirect('movie:description', movie_id=movie_id)
+    return redirect('movie:description', movie_id=movie_id)
 
 class LibraryView(View):
     form_class = UserForm
