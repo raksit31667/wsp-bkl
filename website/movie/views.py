@@ -303,6 +303,7 @@ class DescriptionView(View):
     def get(self, request, movie_id):
         movie = Movie.objects.get(id=movie_id)
         rating = Rating.objects.filter(movie=movie).aggregate(Avg('rating'))['rating__avg']
+        bonuses = MovieBonus.objects.filter(movie=movie)
         movie.movie_teaser_url = self.convertLink(movie.movie_teaser_url)
         error_msg = request.session.get('error_msg')
         success_msg = request.session.get('success_msg')
@@ -311,8 +312,7 @@ class DescriptionView(View):
         own = False
         if(request.user.is_authenticated() and UserOwn.objects.filter(user=request.user,movie=movie).exists()):
             own= True
-
-        return TemplateResponse(request, 'description.html',{ 'movie':movie, 'rating': rating, 'own':own, 'error_msg': error_msg, 'success_msg': success_msg })
+        return TemplateResponse(request, 'description.html',{ 'movie':movie, 'rating': rating, 'bonuses':bonuses, 'own':own })
 
     def convertLink(self, link):
         str = link

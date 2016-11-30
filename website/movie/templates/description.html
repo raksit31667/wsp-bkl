@@ -45,6 +45,28 @@
           <button id = "clickReview" class="btn btn-small btn-green" type="button" data-toggle="modal"
           data-target="#review"><span class="glyphicon glyphicon-star"></span> Review</button>
         </div>
+
+        <div class="panel-group" id="accordion">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h4 class="panel-title text-center">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1"><span class="glyphicon glyphicon-folder-open"></span> Attachment</a>
+              </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse in">
+              <div class="panel-body">
+                <ul>
+                  {% for bonus in bonuses %}
+                  <li><a href="{% url 'movie:download_bonus_api' bonus.id%}">{{bonus.bonus_file.name}} - {{bonus.bonus_file.size|filesizeformat}}</a></li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+
+        </div>
         {% endif %}
         {% if not own and not user.is_superuser %}
         <form id="form-buy" action="{% url 'movie:buy_api' movie.id %}" method="post">
@@ -82,6 +104,7 @@
     </div>
   </div>
 </div>
+
 
 {% include 'buy_modal.html' %}
 
